@@ -8,16 +8,12 @@ from django.views.generic import TemplateView
 #	return render(request,'sd/home.html',context)
 
 class Home(TemplateView):
-	def __init__(self, valor):
-		self.valor = valor
+	def __init__(self):
 		self.context = {}
+		self.context = {'nombre':'','apellido':'','phone':'','email':'','comuna':'','calle':'','dir':'','block':'','dpto':'','fecha':'','duracion':'','invitados':'','nombre':'','email':'','comment':''}
 	def inicio(self,request):
 		return render(request,'home.html',self.context)
 
-class Cotizar(TemplateView):
-	def __init__(self,valor): #cuando usas INIT, debes siempre inicializar todos tus objetos.
-		self.valor = valor
-		self.context = {'nombre':'','apellido':'','phone':'','email':'','comuna':'','calle':'','dir':'','block':'','dpto':'','fecha':'','duracion':'','invitados':''}
 	def llamadaCotizar(self,request):
 		print self.context['nombre']
 		print self.context['apellido']
@@ -106,10 +102,6 @@ class Cotizar(TemplateView):
 		print self.context['invitados']
 		return render(request, 'cotizarCat.html', self.context)
 
-class Contacto(TemplateView):
-	def __init__(self,valor): #cuando usas INIT, debes siempre inicializar todos tus objetos.
-		self.valor = valor
-		self.context = {'nombre':'','email':'','comment':''}
 	def llamadaContacto(self,request):
 		print self.context['nombre']
 		print self.context['email']
