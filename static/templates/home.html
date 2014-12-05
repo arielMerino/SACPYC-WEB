@@ -1,0 +1,92 @@
+{%extends "base.html"%}
+{%block titulo%}Nuestros productos{%endblock%}
+{%block body%}
+	<div id="coffe-break" class="row">
+		<h2>Coffe-Breaks</h2>
+		<div class="row">
+			<img src="/media/img/coffe.jpg" class="col-xs-12 imgPag">
+		</div>
+		<p></p>
+		<div class="panel panel-default info1 contenido-info">
+			<p class="text-justify text-box">Coffee breaks diseñados especialmente para empresas. Tenemos capacidad para atender hasta 500 personas. Ofrecemos diferentes opciones para todo tipo de presupuestos e incluimos alternativas saludables con fruta de la estación, bocadillos light y jugos naturales.<br> Nos preocupamos de cada detalle de principio a fin. Montamos y desmontamos por nuestra cuenta y nos hacemos cargo de la decoración del lugar para que ustedes solo se preocupen de pasarlo bien y compartir. Deja en nuestras manos todos los Coffee Breaks que tu empresa necesite, no te vas a arrepentir. Cotiza con nosotros.</p>
+		</div>
+	</div>
+	<div id="catering" class="row">
+		<h2>Catering</h2>
+		<div class="row">
+			<img src="/media/img/cater.jpg" class="col-xs-12 imgPag">
+		</div>
+		<p></p>
+		<div class="panel panel-default info1 contenido-info">
+			<p class="text-justify text-box">
+			¿Tienes algún evento y no sabes cómo solucionar el tema de la comida? Quizás se trata de la grabación de una película o comercial, tal vez es sólo una maratón de trabajo extra en la oficina. Apostamos que estás cansado de las pizzas y la comida chatarra. Llámanos! Podemos preparar comida casera calentita, ricas y contundentes ensaladas o sándwiches gourmet. También contamos con servicio de mantención con los más deliciosos snacks.<br><br><br>
+			</p>
+		</div>
+	</div>
+	<div id="cumpleano" class="row">
+		<h2>Cumpleaños</h2>
+		<div class="row">
+			<img src="/media/img/cumplecenas.gif" class="col-xs-12 imgPag">
+		</div>
+			<p></p>
+		<div class="panel panel-default info1 contenido-info">
+			<p class="text-justify text-box">
+			¿Estás de cumpleaños?. Te proponemos que lo pases bien con tus visitas y dejes que nosotros nos ocupemos de la comida. Organizamos cumpleaños y armamos un menú personalizado en base a tus requerimientos y tus gustos. Incluso podemos encargarnos de la torta y la decoración si lo prefieres.
+			<br><br><br><br><br>
+			</p>
+		</div>
+	</div>
+	<div id="cena" class="row">
+		<h2>Cenas</h2>
+		<div class="row">
+			<img src="/media/img/cumplecenas.gif" class="col-xs-12 imgPag">
+		</div>
+		<p></p>
+		<div class="panel panel-default info1 contenido-info">
+			<p class="text-justify text-box">
+			Quizás tienes invitados a comer.Te proponemos que lo pases bien con tus visitas y dejes que nosotros nos ocupemos de la comida. Organizamos cocktails y cenas privadas para todos los gustos y edades. Armamos un menú personalizado en base a tus requerimientos y tus gustos.<br><br><br><br><br>
+			</p>
+		</div>
+	</div>
+	<div id="matrimonio" class="row">
+		<h2>Matrimonios</h2>
+		<div class="row">
+			<img src="/media/img/matrimonio.gif" class="col-xs-12 imgPag">
+		</div>
+		<p></p>
+		<div class="panel panel-default info1 contenido-info">
+			<p class="text-justify text-box">
+			¿Vas a casarte y quieres algo distinto, personalizado y con un toque original?. Habla con nosotros! Realizamos cocktails y cenas de matrimonio, somos flexibles, creativos y proactivos y sabremos aconsejarte para que ese día todo esté perfecto.<br><br><br><br><br><br>
+			</p>
+		</div>
+	</div>
+{%endblock%}
+{%block menuIzq%}
+	<div id="menu-lateral" class="panel fondo">
+		<p></p>
+		<button type="button" class="btn-lat btn btn-default btn-lg frente" onclick="botonMenu('coffe-break')">Coffe Breaks</button>
+		<p></p>
+		<button type="button" class="btn-lat btn btn-default btn-lg frente" onclick="botonMenu('catering')">Catering</button>
+		<p></p>
+		<button type="button" class="btn-lat btn btn-default btn-lg frente" onclick="botonMenu('cumpleano')">Cumpleaños</button>
+		<p></p>
+		<button type="button" class="btn-lat btn btn-default btn-lg frente" onclick="botonMenu('cena')">Cenas</button>
+		<p></p>
+		<button type="button" class="btn-lat btn btn-default btn-lg frente" onclick="botonMenu('matrimonio')">Matrimonios</button>
+	</div>
+{%endblock%}
+{%block colDer%}
+	<div id="informacion" class="panel panel-default frente" style="margin-top: 55px;">
+		<h2 class="text-box" style="text-align: center;">Quienes somos</h2>
+  		<p class="text-justify text-box">Hola! Somos Nicolás y Daniela, una pareja de chefs egresados de INACAP Santiago y este es nuestro emprendimiento.<br>
+  		Te invitamos a conocernos!<br>
+		Nos apasiona la cocina y la base de nuestro servicio está en hacer de cada evento algo único. Por eso, trabajamos colaborativamente con nuestros clientes, asesorándolos paso a paso e invitándolos a participar de la creación del menú.</p>
+	</div>
+{%endblock%}
+{%block js%}
+	<script type="text/javascript" src="/static/js/index.js"></script>
+	<script type="text/javascript">
+		document.getElementById('np').className="btn btn-default active";
+		botonMenu('coffe-break');
+	</script>
+{%endblock%}

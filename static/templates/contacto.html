@@ -1,0 +1,70 @@
+{%extends "base.html"%}
+{%block body%}
+	<div id="form-1" class="row">
+		<form name="datos1" id="datos1" method="POST" action="/">{%csrf_token%}
+		    <div class="col-xs-12">
+		    	<h3>Contacto:</h3>
+		    	<div class="col-xs-6">
+		    		<label for="nombre">Nombre:</label>
+			    	<input title="el nombre es obligatorio" type="text" name="nombre" class="form-control" value="{{nombre}}"required/>
+		    		<label for="email">E-mail:</label>
+		    		<input title="ejemplo: mail@ejemplo.com" type="email" name="email" class="form-control" required/>
+		    	</div>
+		    	<div class="col-xs-6"><br></div>
+		    	<div class="col-xs-12">
+		    		<label for="comment">Comentarios:</label>
+	    			<textarea id="comment" name="comment" cols="45" rows="5" class="form-control"></textarea>
+		    	</div>
+	    		<div class="col-xs-4"></div>
+	    		<div class="col-xs-4" style="padding-right:0;padding-top:20px">
+	    			<input type="submit" name="siguiente2" class="btn-lat btn btn-default frente" value="Enviar">
+	    		</div>
+	    		<div class="col-xs-4"></div>
+		    </div>
+	    </form>
+    </div>
+
+    <div class="modal fade" id="mi_modal">
+     <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Mensaje enviado con exito!</h4>
+          </div>
+          <div class="modal-body">
+            <p  id="salida">Revisaremos sus comentarios y responderemos sus dudas a la brevedad. </p> {{nombre}}
+          </div>
+          <div class="modal-footer">
+            <button id="boton-home" type="button" class="btn btn-default" data-dismiss="modal">Volver al Inicio</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+ 
+    <script type="text/javascript">
+     $(document).ready(function() {
+        $('#boton-home').on('click',function(){
+            $(location).attr('href','/');
+        });
+
+    		$('#datos1').submit(function() { // catch the form's submit event
+    			$('#mi_modal').modal('show');
+
+                $.ajax({ // create an AJAX call...
+                    data: $(this).serialize(), // get the form data
+                    type: $(this).attr('method'), // GET or POST
+                    url: $(this).attr('action'), // the file to call
+                    success: function(response) { // on success..
+                        //$('#datos1').html(response); // update the DIV
+                        console.log(response);
+
+                    }
+                });
+                 
+
+                return false;
+            });
+            });
+    </script>
+{%endblock%}

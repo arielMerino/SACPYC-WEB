@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">	
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/static/assets/css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/misclases.css">
+	<title>{%block titulo%}{%endblock%}</title>
+	{%block importar%}{%endblock%}
+</head>
+<body>
+	<div id="page-wrap">
+		<div id="header" class="row fondo">
+			<div id="banner-izq" = class="col-xs-3"></div>
+			<div id="banner-der" class="col-xs-3"></div>
+			{%block header%}
+			{%endblock%}
+		</div>
+		<div id="body" class="row fondo">
+			<div id="columna-izq" class="col-xs-3">
+				<div id="menu-lateral" class="panel fondo">
+					<img id="banner" class="logo" src="/media/img/logo2.png">
+					{%block menuIzq%}
+					{%endblock%}
+				</div>			
+			</div>
+			<div id="cuerpo" class="col-xs-6">
+				<div id="menu" class="btn-group btn-group-justified btn-group-lg">
+					<div id ="menu" class="btn-group btn-group-justified btn-group-lg">
+						<div class="btn-group">
+							<a id="np" type="button" class="btn btn-default frente" href="/">Nuestros Productos</a>
+						</div>
+						<div class="btn-group">
+							<a id="cn"type="button" class="btn btn-default frente" href="/Cotizar">Cotiza con Nosotros</a>
+						</div>
+						<div class="btn-group">
+							<a id="cont" type="button" class="btn btn-default frente" href="/Contacto">Contáctenos</a>
+						</div>
+					</div>
+				</div>
+				<br>
+				<div id="contenido" class="panel panel-default frente">
+					{%block body%}
+					{%endblock%}
+				</div>
+			</div>
+			<div id="columna-der" class="col-xs-3">
+				<br>
+				{%block colDer%}
+				{%endblock%}
+			</div>
+		</div>
+		<div id="footer" class="row fondo">
+			<div class="col-xs-3">
+				<a class="btn btn-social btn-twitter" href="https://twitter.com/contigo_panyceb"><i class="fa fa-twitter"></i> Síguenos en Twitter</a>
+				<br>
+				<a class="btn btn-social btn-facebook" href="https://www.facebook.com/groups/361041017299686/"><i class="fa fa-facebook"></i> Síguenos en Facebook</a>
+			</div>
+			<p class="text-center col-xs-6" ><br>Contigo Pan y Cebolla - Emporio Gourmet</p>
+		</div>
+	</div>
+</body>
+<footer>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="/static/js/bootstrap.min.js"></script>
+	{%block js%}
+	{%endblock%}
+</footer>
+</html>
