@@ -1,0 +1,39 @@
+{%extends "base2.html"%}
+{%block importar%}
+	<link rel="stylesheet" type="text/css" href="/static/css/datepicker3.css">
+{%endblock%}
+{%block body%}
+				<div class="row">
+	    		<div class="col-xs-3"></div>
+	    		<div class="col-xs-6">
+					<h3>Agenda:</h3>
+					<label>Seleccionar una fecha para consultar eventos:</label>
+			    	<div class="input-group date">
+			        	<input type="text" title="la fecha es obligatoria" name="fecha" class="form-control" required/><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+			    	</div>
+			    	<br>
+			    	<div class="col-xs-6">
+			    		<input type="submit" name="consulta" class="btn-lat btn btn-default frente" value="consultar">
+			    	</div>
+			    	
+				</div>
+				<div class="col-xs-3"></div>
+			</div>
+
+{%endblock%}
+{%block js%}
+	<script type="text/javascript" src="/static/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript">
+	document.getElementById('ag').className="btn btn-default active";
+		$('.input-group.date').datepicker({
+	        format: "dd/mm/yyyy",
+	        todayHighlight: true,
+	        language: 'es',
+	        weekStart: 1,
+	        keyboardNavigation: false,
+	        autoclose: true,
+	        startDate: "0d",
+	        todayBtn: 'linked',
+    	});
+	</script>
+{%endblock%}
