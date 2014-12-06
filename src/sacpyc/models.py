@@ -405,8 +405,8 @@ class TipoItem(models.Model):
 
 
 class TipoMenu(models.Model):
-    idtipomenu = models.IntegerField(db_column='IDTIPOMENU', primary_key=True)  # Field name made lowercase.
-    idtipoevento = models.ForeignKey(TipoEvento, db_column='IDTIPOEVENTO')  # Field name made lowercase.
+    idtipomenu = models.IntegerField(db_column='IDTIPOMENU', primary_key=True)  # Field name madee lowercase.
+    idtipoevento = models.ForeignKey(TipoEvento, db_column='IDTIPOEVENTO', blank=True)  # Field name made lowercase.
     nombre_tipo_menu = models.CharField(db_column='NOMBRE_TIPO_MENU', max_length=25, blank=True)  # Field name made lowercase.
 
     class Meta:
