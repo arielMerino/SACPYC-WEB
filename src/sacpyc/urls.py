@@ -25,6 +25,8 @@ urlpatterns = patterns('',
     url(r'^TipoEvento/',Administracion().llamadaTipoEvento),
     url(r'^TipoEventoAgregar/',Administracion().llamadaTipoEventoAgregar),
     url(r'^TipoEventoEditar/',Administracion().llamadaTipoEventoEditar),
+    url(r'^Login/',Administracion().llamadaLogin),
+    url(r'^ValidarUsr/',Administracion().validarLogin),
 
     # url(r'^blog/', include('blog.urls')),
 ) 
