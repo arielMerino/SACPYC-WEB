@@ -15,6 +15,7 @@ class Administracion(TemplateView):
 		self.context['correo']=request.POST.get('correo')
 		self.context['rol']=request.POST.get('rol')
 		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
 			return render(request,'login.html',self.context)
 		return render(request,'agenda.html',self.context)
 
@@ -24,6 +25,7 @@ class Administracion(TemplateView):
 		self.context['correo']=request.POST.get('correo')
 		self.context['rol']=request.POST.get('rol')
 		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
 			return render(request,'login.html',self.context)
 		return render(request,'compras.html',self.context)
 
@@ -33,6 +35,7 @@ class Administracion(TemplateView):
 		self.context['correo']=request.POST.get('correo')
 		self.context['rol']=request.POST.get('rol')
 		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
 			return render(request,'login.html',self.context)
 		return render(request,'cotizarAd.html',self.context)
 
@@ -42,6 +45,7 @@ class Administracion(TemplateView):
 		self.context['correo']=request.POST.get('correo')
 		self.context['rol']=request.POST.get('rol')
 		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
 			return render(request,'login.html',self.context)
 		return render(request,'garzones.html',self.context)
 
@@ -51,6 +55,7 @@ class Administracion(TemplateView):
 		self.context['correo']=request.POST.get('correo')
 		self.context['rol']=request.POST.get('rol')
 		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
 			return render(request,'login.html',self.context)
 		return render(request,'menu.html',self.context)
 
@@ -60,6 +65,7 @@ class Administracion(TemplateView):
 		self.context['correo']=request.POST.get('correo')
 		self.context['rol']=request.POST.get('rol')
 		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
 			return render(request,'login.html',self.context)
 		return render(request,'notificaciones.html',self.context)
 
@@ -69,6 +75,7 @@ class Administracion(TemplateView):
 		self.context['correo']=request.POST.get('correo')
 		self.context['rol']=request.POST.get('rol')
 		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
 			return render(request,'login.html',self.context)
 		return render(request,'proveedores.html',self.context)
 
@@ -78,6 +85,7 @@ class Administracion(TemplateView):
 		self.context['correo']=request.POST.get('correo')
 		self.context['rol']=request.POST.get('rol')
 		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
 			return render(request,'login.html',self.context)
 		return render(request,'tipoevento.html',self.context)
 
