@@ -23,6 +23,8 @@ urlpatterns = patterns('',
     url(r'^Proveedores/',Administracion().llamadaProveedores),
     url(r'^Agenda/',Administracion().llamadaAgenda),
     url(r'^TipoEvento/',Administracion().llamadaTipoEvento),
+    url(r'^Login/',Administracion().llamadaLogin),
+    url(r'^ValidarUsr/',Administracion().validarLogin),
 
     # url(r'^blog/', include('blog.urls')),
 ) 
