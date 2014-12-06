@@ -1,0 +1,29 @@
+{%extends "base2.html"%}
+{%block body%}
+	<div class="row">
+		<div class='col-xs-3'></div>
+		
+		<div class="col-xs-6">
+			<h2>Crear Garzón:</h2>
+			<form method='POST' action='/ValidarCrearGarzon/'/>{%csrf_token%}
+				<label for='correo_garzon'>Correo*:</label>
+				<input type='email' name='correo_garzon' class='form-control' required/>
+				<label for='nombre_garzon'>Nombre*:</label>
+				<input type='text' name='nombre_garzon' class='form-control' required/>
+				<label for='apellido_garzon'>Apellido*:</label>
+				<input type='text' name='apellido_garzon' class='form-control' required/>
+				<label for='telefono_garzon'>Teléfono*:</label>
+				<input type='text' name='telefono_garzon' pattern="\d{8}$" class='form-control' required/><br>
+				<input type='submit' class='btn btn-default' value='aceptar' />
+			</form>
+		</div>
+	</div>
+
+
+{%endblock%}
+{%block js%}
+	<script type="text/javascript" src="/static/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript">
+	document.getElementById('gar').className="btn btn-default active";
+	</script>
+{%endblock%}

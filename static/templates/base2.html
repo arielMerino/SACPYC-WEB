@@ -22,93 +22,51 @@
 			<div id="columna-izq" class="col-xs-3">
 				<div id="menu-lateral" class="panel fondo">
 					<img id="banner" class="logo" src="/media/img/logo2.png">
-					{%block menuIzq%}
-					<div id="informacion" class="panel panel-default frente" style="margin-top: 50px;">
-						<p style="margin:10px">Hola {{nombre}} {{apellido}}</p>
-						<div class="btn-group" style="margin-left:50px;">
-							<a id="np" type="button" class="btn btn-default frente" href="">Cerrar Sesión</a>
+					<div id="informacion" class="panel panel-default frente row" style="padding-top:22px;padding-bottom:22px">
+						<div class='row col-xs-12'>
+							<div class='col-xs-3'></div>
+							<div class='col-xs-9 row'>
+								<p>Hola {{nombre}} {{apellido}}</p>
+								<a id="np" type="button" class="btn btn-default frente col-xs-12" href="">Cerrar Sesión</a>
+							</div>
 						</div>
-						<br>
-						<br>
 					</div>
-					{%endblock%}
+					<div id='menuIzqAdmin' class='panel panel-default frente row' style='padding-top:22px;padding-bottom:22px;'>
+						<div class='row col-xs-12'>
+							<div class='col-xs-3'></div>
+							<div class='col-xs-9 row'>
+								{%block menuIzq%}
+								{%endblock%}
+							</div>	
+						</div>
+					</div>
 				</div>			
 			</div>
 			<div id="cuerpo" class="col-xs-8">
 				<div id="menu" class="btn-group btn-group-justified btn-group-lg">
 					<div id ="menu" class="btn-group btn-group-justified btn-group-lg">
 						<div class="btn-group">
-							<form method="POST" action="/Agenda/">{%csrf_token%}
-								<input type='hidden' name='nombre' value='{{nombre}}'>
-								<input type='hidden' name='apellido' value='{{apellido}}'>
-								<input type='hidden' name='correo' value='{{correo}}'>
-								<input type='hidden' name='rol' value='{{rol}}'>
-								<input id='ag' type='submit' class='btn btn-default frente' value='Agenda'/>
-							</form>
-							
+							<a type='button' class='btn btn-default frente' href="/Agenda/" >Agenda</a>
+						</div>
+						<div class="btn-group"><a type='button' class='btn btn-default frente' href="/CotizarAd/" >Cotizaciones</a>
 						</div>
 						<div class="btn-group">
-							<form method="POST" action="/CotizarAd/">{%csrf_token%}
-								<input type='hidden' name='nombre' value='{{nombre}}'>
-								<input type='hidden' name='apellido' value='{{apellido}}'>
-								<input type='hidden' name='correo' value='{{correo}}'>
-								<input type='hidden' name='rol' value='{{rol}}'>
-								<input id='cot' type='submit' class='btn btn-default frente' value='Cotizaciones'/>
-							</form>
+							<a type='button' class='btn btn-default frente' href="/TipoEvento/" >Tipo Evento</a>
 						</div>
 						<div class="btn-group">
-							<form method="POST" action="/TipoEvento/">{%csrf_token%}
-								<input type='hidden' name='nombre' value='{{nombre}}'>
-								<input type='hidden' name='apellido' value='{{apellido}}'>
-								<input type='hidden' name='correo' value='{{correo}}'>
-								<input type='hidden' name='rol' value='{{rol}}'>
-								<input id='te' type='submit' class='btn btn-default frente' value='Tipo evento'/>
-							</form>
+							<a type='button' class='btn btn-default frente' href="/Compras/" >compras</a>
 						</div>
 						<div class="btn-group">
-							<form method="POST" action="/Compras/">{%csrf_token%}
-								<input type='hidden' name='nombre' value='{{nombre}}'>
-								<input type='hidden' name='apellido' value='{{apellido}}'>
-								<input type='hidden' name='correo' value='{{correo}}'>
-								<input type='hidden' name='rol' value='{{rol}}'>
-								<input id='comp' type='submit' class='btn btn-default frente' value='Compras'/>
-							</form>
+							<a type='button' class='btn btn-default frente' href="/Garzones/" >Garzones</a>
 						</div>
 						<div class="btn-group">
-							<form method="POST" action="/Garzones/">{%csrf_token%}
-								<input type='hidden' name='nombre' value='{{nombre}}'>
-								<input type='hidden' name='apellido' value='{{apellido}}'>
-								<input type='hidden' name='correo' value='{{correo}}'>
-								<input type='hidden' name='rol' value='{{rol}}'>
-								<input id='gar' type='submit' class='btn btn-default frente' value='Garzones'/>
-							</form>
+							<a type='button' class='btn btn-default frente' href="/Proveedores/" >Proveedores</a>
 						</div>
 						<div class="btn-group">
-							<form method="POST" action="/Proveedores/">{%csrf_token%}
-								<input type='hidden' name='nombre' value='{{nombre}}'>
-								<input type='hidden' name='apellido' value='{{apellido}}'>
-								<input type='hidden' name='correo' value='{{correo}}'>
-								<input type='hidden' name='rol' value='{{rol}}'>
-								<input id='pro' type='submit' class='btn btn-default frente' value='Proveedores'/>
-							</form>
+							<a type='button' class='btn btn-default frente' href="/Notificaciones/" >Notificaciones</a>
 						</div>
 						<div class="btn-group">
-							<form method="POST" action="/Notificaciones/">{%csrf_token%}
-								<input type='hidden' name='nombre' value='{{nombre}}'>
-								<input type='hidden' name='apellido' value='{{apellido}}'>
-								<input type='hidden' name='correo' value='{{correo}}'>
-								<input type='hidden' name='rol' value='{{rol}}'>
-								<input id='not' type='submit' class='btn btn-default frente' value='Notificaciones'/>
-							</form>
-						</div>
-						<div class="btn-group">
-							<form method="POST" action="/Menu/">{%csrf_token%}
-								<input type='hidden' name='nombre' value='{{nombre}}'>
-								<input type='hidden' name='apellido' value='{{apellido}}'>
-								<input type='hidden' name='correo' value='{{correo}}'>
-								<input type='hidden' name='rol' value='{{rol}}'>
-								<input id='ag' type='submit' class='btn btn-default frente' value='Menu'/>
-							</form>
+							<a type='button' class='btn btn-default frente' href="/Menu/" >Menu</a>
 						</div>
 					</div>
 				</div>

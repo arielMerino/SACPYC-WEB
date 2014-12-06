@@ -22,14 +22,11 @@ class Administrador(models.Model):
     class Meta:
         managed = False
         db_table = 'administrador'
-    def __str__(self):
-        return '%s;%s;%s;%s;%s' % (self.correo_admin,self.nombre_admin,self.apellido,self.rol,self.clave_admin)
 
 
 class AgendamientoEvento(models.Model):
     idagendamientoevento = models.IntegerField(db_column='IDAGENDAMIENTOEVENTO', primary_key=True)  # Field name made lowercase.
     id_cotizacion = models.ForeignKey('Cotizacion', db_column='ID_COTIZACION')  # Field name made lowercase.
-    idtipoevento = models.ForeignKey('TipoEvento', db_column='IDTIPOEVENTO', blank=True, null=True)  # Field name made lowercase.
     fecha_agendamiento_evento = models.DateField(db_column='FECHA_AGENDAMIENTO_EVENTO', blank=True, null=True)  # Field name made lowercase.
     hora_agendamiento_evento = models.TimeField(db_column='HORA_AGENDAMIENTO_EVENTO', blank=True, null=True)  # Field name made lowercase.
     duracion_agendamiento_evento = models.IntegerField(db_column='DURACION_AGENDAMIENTO_EVENTO', blank=True, null=True)  # Field name made lowercase.
@@ -55,81 +52,13 @@ class Auditoria(models.Model):
         db_table = 'auditoria'
 
 
-class AuthGroup(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
-    name = models.CharField(unique=True, max_length=80)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_group'
-
-
-class AuthGroupPermissions(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
-    group = models.ForeignKey(AuthGroup)
-    permission = models.ForeignKey('AuthPermission')
-
-    class Meta:
-        managed = False
-        db_table = 'auth_group_permissions'
-
-
-class AuthPermission(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
-    name = models.CharField(max_length=50)
-    content_type = models.ForeignKey('DjangoContentType')
-    codename = models.CharField(max_length=100)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_permission'
-
-
-class AuthUser(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
-    password = models.CharField(max_length=128)
-    last_login = models.DateTimeField()
-    is_superuser = models.IntegerField()
-    username = models.CharField(unique=True, max_length=30)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    email = models.CharField(max_length=75)
-    is_staff = models.IntegerField()
-    is_active = models.IntegerField()
-    date_joined = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'auth_user'
-
-
-class AuthUserGroups(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
-    user = models.ForeignKey(AuthUser)
-    group = models.ForeignKey(AuthGroup)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_user_groups'
-
-
-class AuthUserUserPermissions(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
-    user = models.ForeignKey(AuthUser)
-    permission = models.ForeignKey(AuthPermission)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_user_user_permissions'
-
-
 class CantidadHistorica(models.Model):
-    idhistorico = models.IntegerField(db_column='IDHISTORICO', primary_key=True)  # Field name made lowercase.
-    idtipoevento = models.ForeignKey('TipoEvento', db_column='IDTIPOEVENTO')  # Field name made lowercase.
-    iditem = models.ForeignKey('Item', db_column='IDITEM')  # Field name made lowercase.
     cantidad = models.IntegerField(db_column='CANTIDAD', blank=True, null=True)  # Field name made lowercase.
     numero_personas = models.IntegerField(db_column='NUMERO_PERSONAS', blank=True, null=True)  # Field name made lowercase.
     fecha = models.DateField(db_column='FECHA', blank=True, null=True)  # Field name made lowercase.
+    idtipoevento = models.ForeignKey('TipoEvento', db_column='IDTIPOEVENTO')  # Field name made lowercase.
+    iditem = models.ForeignKey('Item', db_column='IDITEM')  # Field name made lowercase.
+    idhistorico = models.IntegerField(db_column='IDHISTORICO', primary_key=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -202,58 +131,12 @@ class Cotizacion(models.Model):
         db_table = 'cotizacion'
 
 
-class DjangoAdminLog(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
-    action_time = models.DateTimeField()
-    object_id = models.TextField(blank=True)
-    object_repr = models.CharField(max_length=200)
-    action_flag = models.IntegerField()
-    change_message = models.TextField()
-    content_type = models.ForeignKey('DjangoContentType', blank=True, null=True)
-    user = models.ForeignKey(AuthUser)
-
-    class Meta:
-        managed = False
-        db_table = 'django_admin_log'
-
-
-class DjangoContentType(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
-    name = models.CharField(max_length=100)
-    app_label = models.CharField(max_length=100)
-    model = models.CharField(max_length=100)
-
-    class Meta:
-        managed = False
-        db_table = 'django_content_type'
-
-
-class DjangoMigrations(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
-    app = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    applied = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'django_migrations'
-
-
-class DjangoSession(models.Model):
-    session_key = models.CharField(primary_key=True, max_length=40)
-    session_data = models.TextField()
-    expire_date = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'django_session'
-
-
 class Garzon(models.Model):
-    mail_garzon = models.CharField(db_column='MAIL_GARZON', primary_key=True, max_length=45)  # Field name made lowercase.
+    mail_garzon = models.CharField(db_column='MAIL_GARZON', max_length=45, blank=True)  # Field name made lowercase.
     telefono_garzon = models.IntegerField(db_column='TELEFONO_GARZON', blank=True, null=True)  # Field name made lowercase.
     nombre_garzon = models.CharField(db_column='NOMBRE_GARZON', max_length=25, blank=True)  # Field name made lowercase.
     apellido_garzon = models.CharField(db_column='APELLIDO_GARZON', max_length=25, blank=True)  # Field name made lowercase.
+    idgarzon = models.IntegerField(db_column='IDGARZON', primary_key=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -262,7 +145,7 @@ class Garzon(models.Model):
 
 class GarzonEvento(models.Model):
     idagendamientoevento = models.ForeignKey(AgendamientoEvento, db_column='IDAGENDAMIENTOEVENTO')  # Field name made lowercase.
-    mail_garzon = models.ForeignKey(Garzon, db_column='MAIL_GARZON')  # Field name made lowercase.
+    idgarzon = models.ForeignKey(Garzon, db_column='IDGARZON')  # Field name made lowercase.
     respuesta = models.CharField(db_column='RESPUESTA', max_length=5, blank=True)  # Field name made lowercase.
 
     class Meta:
@@ -305,7 +188,6 @@ class IngredienteItemEspecial(models.Model):
 
 class Item(models.Model):
     iditem = models.IntegerField(db_column='IDITEM', primary_key=True)  # Field name made lowercase.
-    idtipomenu = models.ForeignKey('TipoMenu', db_column='IDTIPOMENU', blank=True, null=True)  # Field name made lowercase.
     idtipo = models.ForeignKey('TipoItem', db_column='IDTIPO', blank=True, null=True)  # Field name made lowercase.
     nombre_item = models.CharField(db_column='NOMBRE_ITEM', max_length=25, blank=True)  # Field name made lowercase.
 
@@ -324,6 +206,15 @@ class ItemEspecial(models.Model):
     class Meta:
         managed = False
         db_table = 'item_especial'
+
+
+class ItemMenu(models.Model):
+    idtipomenu = models.ForeignKey('TipoMenu', db_column='IDTIPOMENU')  # Field name made lowercase.
+    iditem = models.ForeignKey(Item, db_column='IDITEM')  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'item_menu'
 
 
 class ItemSolicitudDeCotizacion(models.Model):
@@ -405,8 +296,8 @@ class TipoItem(models.Model):
 
 
 class TipoMenu(models.Model):
-    idtipomenu = models.IntegerField(db_column='IDTIPOMENU', primary_key=True)  # Field name madee lowercase.
-    idtipoevento = models.ForeignKey(TipoEvento, db_column='IDTIPOEVENTO', blank=True)  # Field name made lowercase.
+    idtipomenu = models.IntegerField(db_column='IDTIPOMENU', primary_key=True)  # Field name made lowercase.
+    idtipoevento = models.ForeignKey(TipoEvento, db_column='IDTIPOEVENTO', blank=True, null=True)  # Field name made lowercase.
     nombre_tipo_menu = models.CharField(db_column='NOMBRE_TIPO_MENU', max_length=25, blank=True)  # Field name made lowercase.
 
     class Meta:
@@ -444,3 +335,14 @@ class UtensilioEvento(models.Model):
     class Meta:
         managed = False
         db_table = 'utensilio_evento'
+
+
+class UtensilioItem(models.Model):
+    iditem = models.ForeignKey(Item, db_column='IDITEM')  # Field name made lowercase.
+    idutensilio = models.ForeignKey(Utensilio, db_column='IDUTENSILIO')  # Field name made lowercase.
+    cantidaditem = models.IntegerField(db_column='CANTIDADITEM', blank=True, null=True)  # Field name made lowercase.
+    cantidadutensilio = models.IntegerField(db_column='CANTIDADUTENSILIO', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'utensilio_item'
