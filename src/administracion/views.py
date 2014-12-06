@@ -88,20 +88,35 @@ class Administracion(TemplateView):
 		return render(request,'tipoevento.html',self.context)
 
 	def llamadaTipoEventoAgregar(self,request):
-		lista_menu=[]
-		tabla = TipoMenu.objects.all()
-		cantidad = tabla.count()
-		for item in range(cantidad):
-			lista_menu.append(tabla[item].nombre_tipo_menu)
-		self.context["tipos_menu"] = lista_menu
 		return render(request,'tipoeventoAgregar.html',self.context)
 
+	def llamadaTipoEventoAddMenu(self,request):
+		self.context["nombre_e"] = request.POST.get("nombre_evento")
+		nombre = self.context["nombre_e"]
+		evento = TipoEvento(nombre_tipo_evento=nombre)
+		evento.save()
+		evento = TipoEvento.objects.get(nombre_tipo_evento=nombre)
+		menu1 = TipoMenu(nombre_tipo_menu="Básico",idtipoevento=evento)
+		menu2 = TipoMenu(nombre_tipo_menu="Estandar",idtipoevento=evento)
+		menu3 = TipoMenu(nombre_tipo_menu="Premium",idtipoevento=evento)
+		menu1.save()
+		menu2.save()
+		menu3.save()
+		self.context["evento"] = evento
+		menu = TipoMenu.objects.filter(idtipoevento = evento.idtipoevento)
+		self.context["menus"] = menu
+		return render(request,'tipoeventoAddMenu.html',self.context)
+
 	def llamadaTipoEventoEditar(self,request):
+		self.context["error"] = ""
 		self.context["nombre_evento"] = request.POST.get("seleccion")
 		nombre = self.context["nombre_evento"]
 		evento = TipoEvento.objects.get(nombre_tipo_evento=nombre)
 		menu = TipoMenu.objects.filter(idtipoevento = evento.idtipoevento)
-		self.context["nombre_menu"] = menu[0].nombre_tipo_menu
+		if menu.count() == 0:
+			self.context["error"] = "Aun no existen menus asociados"
+			return render(request,'tipoeventoEditar.html',self.context)
+		self.context["menus"] = menu
 		return render(request,'tipoeventoEditar.html',self.context)
 
 	def llamadaLogin(self,request):

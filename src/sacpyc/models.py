@@ -393,6 +393,8 @@ class TipoEvento(models.Model):
     class Meta:
         managed = False
         db_table = 'tipo_evento'
+    def __str__(self):
+        return '%s;%s'%(self.idtipoevento,self.nombre_tipo_evento)
 
 
 class TipoItem(models.Model):
@@ -412,6 +414,8 @@ class TipoMenu(models.Model):
     class Meta:
         managed = False
         db_table = 'tipo_menu'
+    def __str__(self):
+        return '%s;%s;%s'%(self.idtipomenu,self.idtipoevento,self.nombre_tipo_menu)
 
 
 class TipoUtensilio(models.Model):
