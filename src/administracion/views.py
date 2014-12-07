@@ -648,6 +648,12 @@ class Administracion(TemplateView):
 		return render(request,'tipoeventoAgregar.html',self.context)
 
 	def llamadaTipoEventoAddMenu(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
+
 		self.context["nombre_e"] = request.POST.get("nombre_evento")
 		nombre = self.context["nombre_e"]
 		evento = TipoEvento(nombre_tipo_evento=nombre)
@@ -660,9 +666,82 @@ class Administracion(TemplateView):
 		menu2.save()
 		menu3.save()
 		self.context["evento"] = evento
+		request.session["nombre_tipo_evento"] = evento.nombre_tipo_evento
 		menu = TipoMenu.objects.filter(idtipoevento = evento.idtipoevento)
 		self.context["menus"] = menu
 		return render(request,'tipoeventoAddMenu.html',self.context)
+
+	def llamadaTipoEventoEdMenu(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
+		lista_item = []
+		lista_tipos = []
+		tipos = TipoItem.objects.all()
+		for i in range(tipos.count()):
+			dicc = {}
+			lista_aux = Item.objects.filter(idtipo = tipos[i].idtipo)
+			dicc["item"] = lista_aux
+			dicc["tipo"] = tipos[i].nombre_tipo
+			lista_item.append(dicc)
+			lista_tipos.append(tipos[i].nombre_tipo)
+		self.context["lista_items"] = lista_item
+		self.context["tipos_item"] = lista_tipos
+		self.context["nombre_menu"] = request.POST.get("seleccion")
+		self.context["nombre_tipo_evento"] = request.session["nombre_tipo_evento"]
+		request.session["nombre_tipo_evento"] = self.context["nombre_tipo_evento"]
+		request.session["nombre_menu"] = self.context["nombre_menu"]
+		return render(request,'tipoeventoMenuitem.html',self.context)
+
+	def llamadaTipoEventoEdCheck(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
+
+		self.context["nombre_menu"] = request.session["nombre_menu"]
+		self.context["nombre_tipo_evento"] = request.session["nombre_tipo_evento"]
+		lista_checks = request.POST.getlist('checks')
+		evento = TipoEvento.objects.get(nombre_tipo_evento=self.context["nombre_tipo_evento"])
+		print evento.nombre_tipo_evento
+		menu = TipoMenu.objects.get(nombre_tipo_menu=self.context["nombre_menu"], idtipoevento=evento.idtipoevento)
+		print menu.nombre_tipo_menu
+		for seleccion in lista_checks:
+			check = Item.objects.get(nombre_item=seleccion)
+			print check.nombre_item
+			relacion = ItemMenu(idtipomenu=menu, iditem=check)
+			relacion.save()
+
+		menus = TipoMenu.objects.filter(idtipoevento = evento.idtipoevento)
+		self.context["menus"] = menus
+		self.context["evento"] = evento
+		return render(request,'tipoeventoAddMenu.html',self.context)
+
+	def llamadaTipoEventoEMenu(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
+
+		self.context["nombre_tipo_menu"] = request.POST.get("seleccion")
+		self.context["nombre_evento"] = request.session["nombre_tipo_evento"]
+		nombre_e = self.context["nombre_evento"]
+		evento = TipoEvento.objects.get(nombre_tipo_evento=nombre_e)
+		menu = TipoMenu.objects.get(idtipoevento = evento.idtipoevento, nombre_tipo_menu=self.context["nombre_tipo_menu"])
+		print menu.nombre_tipo_menu
+		self.context["nombre_evento"] = request.session["nombre_tipo_evento"]
+		n_evento = self.context["nombre_evento"]
+		lista_id_items = ItemMenu.objects.filter(idtipomenu=menu.idtipomenu)
+		lista_item=[]
+		for i in lista_id_items:
+			item_aux = Item.objects.get(iditem = i.iditem.iditem)
+			lista_item.append(item_aux)
+		self.context["lista_item"] = lista_item
+		return render(request,'tipoeventoEMenu.html',self.context)
 
 	def llamadaTipoEventoEditar(self,request):
 		self.context["error"] = ""
@@ -671,6 +750,7 @@ class Administracion(TemplateView):
 		if self.context['nombre']==None:
 			self.context["error"]='Debes iniciar sesión*'
 			return render(request,'login.html',self.context)
+
 		self.context["nombre_evento"] = request.POST.get("seleccion")
 		nombre = self.context["nombre_evento"]
 		evento = TipoEvento.objects.get(nombre_tipo_evento=nombre)
@@ -678,6 +758,7 @@ class Administracion(TemplateView):
 		if menu.count() == 0:
 			self.context["error"] = "Aun no existen menus asociados"
 			return render(request,'tipoeventoEditar.html',self.context)
+		request.session["nombre_tipo_evento"] = evento.nombre_tipo_evento
 		self.context["menus"] = menu
 		return render(request,'tipoeventoEditar.html',self.context)
 
