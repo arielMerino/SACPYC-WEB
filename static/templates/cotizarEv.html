@@ -14,30 +14,19 @@
 {%block body%}
     <div id="form-2" class="row">
     	<form method="POST" action="/CotizarCat/">{%csrf_token%}
-    		<div id="esconder1">
-	    		<input type="text" name="nombre" value="{{nombre}}">
-	    		<input type="text" name="apellido" value="{{apellido}}">
-	    		<input type="text" name="phone" value="{{phone}}">
-	    		<input type="text" name="email" value="{{email}}">
-	    		<input type="text" name="comuna" value="{{comuna}}">
-	    		<input type="text" name="calle" value="{{calle}}">
-	    		<input type="text" name="dir" value="{{dir}}">
-	    		<input type="text" name="blocke" value="{{blocke}}">
-	    		<input type="text" name="dpto" value="{{dpto}}">
-	    	</div>
     		<div class="row">
 	    		<div class="col-xs-3"></div>
 	    		<div class="col-xs-6">
 					<h3>Datos del Evento:</h3>
-					<label>Fecha Evento:</label>
+					<label>Fecha Evento*:</label>
 			    	<div class="input-group date">
-			        	<input type="text" title="la fecha es obligatoria" name="fecha" class="form-control" required/><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+			        	<input type="text" title="la fecha es obligatoria" name="fecha" pattern='\d\d\/\d\d\/\d\d\d\d' class="form-control" required/><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
 			    	</div>
-			    	<label for="hora">Hora evento:</label>
+			    	<label for="hora">Hora evento*:</label>
 			    	<input title="ej: 20:30" type="time" name="hora" class="form-control" required/>
-			    	<label for="duracion">Duración Estimada: (horas)</label>
+			    	<label for="duracion">Duración Estimada*: (horas)</label>
 		    		<input title="debe ingresar la duración estimada en horas" min="1" max="12" type="number" value="3" name="duracion" class="form-control" required/>
-					<label for="invitados" >Cantidad de Invitados:</label>
+					<label for="invitados" >Cantidad de Invitados*:</label>
 					<input title="debe ingresar la cantidad de invitados" name="invitados" type="number" min="1" max="500" class="form-control" value="100" onclick="">
 				</div>
 				<div class="col-xs-3"></div>
@@ -52,17 +41,12 @@
 			</div>
     	</form>
     </div>
-    {{nombre}}<br>
-    {{apellido}}<br>
-    {{email}}<br>
-    {{phone}}<br>
 {%endblock%}
 {%block js%}
 	<script type="text/javascript" src="/static/js/bootstrap-datepicker.js"></script>
 	<script type="text/javascript">
 		document.getElementById('nuevaCot').className="btn-lat btn btn-default btn-lg frente active";
 		document.getElementById('cn').className="btn btn-default active";
-		document.getElementById('esconder1').style.display="none";
 		$('.input-group.date').datepicker({
 	        format: "dd/mm/yyyy",
 	        todayHighlight: true,

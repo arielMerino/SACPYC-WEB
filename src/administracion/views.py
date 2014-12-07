@@ -325,8 +325,140 @@ class Administracion(TemplateView):
 		self.context['items'] = listaItems
 
 		return render(request,'itemAd.html',self.context)
+	def validarEditarItem(self,request):
+
+		iditem = request.session['iditem']
+		nombre = request.POST.get('nombreI')
+		idtipo = request.POST.get('tipoI')
+
+		listaItems = Item.objects.filter(nombre_item=nombre)
+		if listaItems.count() == 1:
+			print listaItems[0].iditem
+			print iditem
+			if int(listaItems[0].iditem) == int(iditem):
+				
+				item = Item.objects.get(iditem=iditem)
+				tipo = TipoItem.objects.get(idtipo=idtipo)
+
+				item.nombre_item=nombre
+				item.idtipo = tipo
+				item.save()
+
+				items = Item.objects.all()
+				tipositem = TipoItem.objects.all()
+
+				listaItems = []
+				listaTipos = []
+
+				for tipo in tipositem:
+					dicc = {}
+					contador = 0
+					dicc['idT'] = tipo.idtipo
+					dicc['nombreT'] = tipo.nombre_tipo
+					for item in items:
+						if item.idtipo == tipo:
+							contador+=1
+					dicc['cantidadT'] = contador
+					listaTipos.append(dicc)
+
+				for item in items:
+					dicc = {}
+					dicc['idI'] = item.iditem
+					dicc['idT'] = item.idtipo
+					dicc['idTstr'] = item.idtipo.nombre_tipo
+					dicc['nombreI'] = item.nombre_item
+					dicc['cantidadIn'] = 0
+					listaItems.append(dicc)
+
+				self.context['tiposItem'] = listaTipos
+				self.context['items'] = listaItems
+
+				return render(request,'item.html',self.context)
+
+		if listaItems.count() > 0:
+
+			self.context['error'] = 'ERROR - el nombre selsccionado ya existe*'
+
+			item = Item.objects.get(iditem=iditem)
+			self.context['iditem'] = iditem
+			self.context['idtipo'] = item.idtipo.idtipo
+			self.context['nombre_item'] = item.nombre_item
+			self.context['tipoItem'] = item.idtipo.nombre_tipo
+
+			items = Item.objects.all()
+			tipositem = TipoItem.objects.all()
+
+			listaItems = []
+			listaTipos = []
+
+			for tipo in tipositem:
+				dicc = {}
+				contador = 0
+				dicc['idT'] = tipo.idtipo
+				dicc['nombreT'] = tipo.nombre_tipo
+				for item in items:
+					if item.idtipo == tipo:
+						contador+=1
+				dicc['cantidadT'] = contador
+				listaTipos.append(dicc)
+
+			for item in items:
+				dicc = {}
+				dicc['idI'] = item.iditem
+				dicc['idT'] = item.idtipo
+				dicc['idTstr'] = item.idtipo.nombre_tipo
+				dicc['nombreI'] = item.nombre_item
+				dicc['cantidadIn'] = 0
+				listaItems.append(dicc)
+
+			self.context['tiposItem'] = listaTipos
+			self.context['items'] = listaItems
+
+			return render(request,'itemUp.html',self.context)
+
+		item = Item.objects.get(iditem=iditem)
+		tipo = TipoItem.objects.get(idtipo=idtipo)
+
+		item.nombre_item=nombre
+		item.idtipo = tipo
+		item.save()
+
+		items = Item.objects.all()
+		tipositem = TipoItem.objects.all()
+
+		listaItems = []
+		listaTipos = []
+
+		for tipo in tipositem:
+			dicc = {}
+			contador = 0
+			dicc['idT'] = tipo.idtipo
+			dicc['nombreT'] = tipo.nombre_tipo
+			for item in items:
+				if item.idtipo == tipo:
+					contador+=1
+			dicc['cantidadT'] = contador
+			listaTipos.append(dicc)
+
+		for item in items:
+			dicc = {}
+			dicc['idI'] = item.iditem
+			dicc['idT'] = item.idtipo
+			dicc['idTstr'] = item.idtipo.nombre_tipo
+			dicc['nombreI'] = item.nombre_item
+			dicc['cantidadIn'] = 0
+			listaItems.append(dicc)
+
+		self.context['tiposItem'] = listaTipos
+		self.context['items'] = listaItems
+
+		return render(request,'item.html',self.context)
+
 	def editarItem(self,request):
 		idI = request.POST.get('item')
+
+		request.session['iditem'] = idI
+
 		item = Item.objects.get(iditem=idI)
 		self.context['iditem'] = idI
 		self.context['idtipo'] = item.idtipo.idtipo
@@ -360,12 +492,49 @@ class Administracion(TemplateView):
 			dicc['cantidadIn'] = 0
 			listaItems.append(dicc)
 
-		print self.context['idtipo']
-
 		self.context['tiposItem'] = listaTipos
 		self.context['items'] = listaItems
 
 		return render(request,'itemUp.html',self.context)
+
+
+	def eliminarItem(self,request):
+		item = request.POST.get('item')
+		q = Item.objects.get(iditem=item)
+		q.delete()
+		
+		items = Item.objects.all()
+		tipositem = TipoItem.objects.all()
+
+		listaItems = []
+		listaTipos = []
+
+		for tipo in tipositem:
+			dicc = {}
+			contador = 0
+			dicc['idT'] = tipo.idtipo
+			dicc['nombreT'] = tipo.nombre_tipo
+			for item in items:
+				if item.idtipo == tipo:
+					contador+=1
+			dicc['cantidadT'] = contador
+			listaTipos.append(dicc)
+
+		for item in items:
+			dicc = {}
+			dicc['idI'] = item.iditem
+			dicc['idT'] = item.idtipo
+			dicc['idTstr'] = item.idtipo.nombre_tipo
+			dicc['nombreI'] = item.nombre_item
+			dicc['cantidadIn'] = 0
+			listaItems.append(dicc)
+
+		self.context['tiposItem'] = listaTipos
+		self.context['items'] = listaItems
+
+		return render(request,'item.html',self.context)
+		return render(request,'item.html',self.context)
+
 
 	def validarCrearItem(self,request):
 		nombreI = request.POST.get('nombreI')
@@ -409,12 +578,50 @@ class Administracion(TemplateView):
 		return render(request,'tipoItemAd.html',self.context)
 
 	def editarTipoItem(self,request):
-		self.context['id'] = request.POST.get('tipoI')
+		idT = request.POST.get('tipoI')
+		tipo = TipoItem.objects.get(idtipo=idT)
 
-		return render(request,'item.html',self.context)
+		self.context['idT']=idT
+		self.context['nombreT']=tipo.nombre_tipo
+		request.session['idT'] = idT
+
+		return render(request,'tipoItemEditar.html',self.context)
 
 	def eliminarTipoItem(self,request):
-		return render(request,'item.html',self.context)
+		idT = request.POST.get('tipoI')
+		tipo = TipoItem.objects.get(idtipo=idT)
+		tipo.delete()
+
+		items = Item.objects.all()
+		tipositem = TipoItem.objects.all()
+
+		listaItems = []
+		listaTipos = []
+
+		for tipo in tipositem:
+			dicc = {}
+			contador = 0
+			dicc['idT'] = tipo.idtipo
+			dicc['nombreT'] = tipo.nombre_tipo
+			for item in items:
+				if item.idtipo == tipo:
+					contador+=1
+			dicc['cantidadT'] = contador
+			listaTipos.append(dicc)
+
+		for item in items:
+			dicc = {}
+			dicc['idI'] = item.iditem
+			dicc['idT'] = item.idtipo
+			dicc['idTstr'] = item.idtipo.nombre_tipo
+			dicc['nombreI'] = item.nombre_item
+			dicc['cantidadIn'] = 0
+			listaItems.append(dicc)
+
+		self.context['tiposItem'] = listaTipos
+		self.context['items'] = listaItems
+
+		return render(request,'redirect.html',self.context)
 
 	def validarCrearTipoItem(self,request):
 		nombreT = request.POST.get('nombreT')
@@ -449,12 +656,13 @@ class Administracion(TemplateView):
 
 			self.context['tiposItem'] = listaTipos
 			self.context['items'] = listaItems
-			self.context['error'] = 'ERROR - El tipo de ítem ya ue ingresado'
+			self.context['error'] = 'ERROR - El tipo de ítem ya ue ingresado*'
 			return render(request,'tipoItemAd.html',self.context)
+
 		tipoItem = TipoItem(nombre_tipo=nombreT)
 		tipoItem.save()
 
-		iitems = Item.objects.all()
+		items = Item.objects.all()
 		tipositem = TipoItem.objects.all()
 
 		listaItems = []
@@ -486,11 +694,58 @@ class Administracion(TemplateView):
 		return render(request,'item.html',self.context)
 
 	def validarEditarTipoItem(self,request):
+		idT = request.session['idT']
+		nombreT = request.POST.get('nombreT')
+		request.session['idT'] = None
 
+		original = TipoItem.objects.get(idtipo=idT)
+		nombreOr = original.nombre_tipo
+		listaMatch = TipoItem.objects.filter(nombre_tipo=nombreT)
 
-		return render(request,'item.html',self.context)
+		if listaMatch.count() > 0 and nombreT!=nombreOr:
+			self.context['error'] = 'ERROR - el nombre ya ha sido utilizado*'
 
-	def validarEliminarTipoItem(self,request):
+			tipo = TipoItem.objects.get(idtipo=idT)
+
+			self.context['idT']=idT
+			self.context['nombreT']=nombreOr
+			request.session['idT'] = idT
+
+			return render(request,'tipoItemEditar.html',self.context)
+		else:
+			actualizado = TipoItem.objects.get(idtipo=idT)
+			actualizado.nombre_tipo = nombreT
+			actualizado.save()
+
+		items = Item.objects.all()
+		tipositem = TipoItem.objects.all()
+
+		listaItems = []
+		listaTipos = []
+
+		for tipo in tipositem:
+			dicc = {}
+			contador = 0
+			dicc['idT'] = tipo.idtipo
+			dicc['nombreT'] = tipo.nombre_tipo
+			for item in items:
+				if item.idtipo == tipo:
+					contador+=1
+			dicc['cantidadT'] = contador
+			listaTipos.append(dicc)
+
+		for item in items:
+			dicc = {}
+			dicc['idI'] = item.iditem
+			dicc['idT'] = item.idtipo
+			dicc['idTstr'] = item.idtipo.nombre_tipo
+			dicc['nombreI'] = item.nombre_item
+			dicc['cantidadIn'] = 0
+			listaItems.append(dicc)
+
+		self.context['tiposItem'] = listaTipos
+		self.context['items'] = listaItems
+
 		return render(request,'item.html',self.context)
 
 	def llamadaNotificaciones(self,request):
@@ -793,7 +1048,7 @@ class Administracion(TemplateView):
 		self.context["nombre_tipo_evento"] = request.session["nombre_tipo_evento"]
 		request.session["nombre_tipo_evento"] = self.context["nombre_tipo_evento"]
 		request.session["nombre_menu"] = self.context["nombre_menu"]
-		return render(request,'tipoeventoMenuitem.html',self.context)
+		return render(request,'tipoeventoMenuItem.html',self.context)
 
 	def agregarItemMenu(self,request):
 		self.context['nombre']=request.session['nombre']

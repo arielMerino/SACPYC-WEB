@@ -19,7 +19,7 @@
 							<td>{{tipo.nombreT}}</td>
 							<td>{{tipo.cantidadT}}</td>
 							<td>
-								<input type='radio' value='{{tipo.idtipo}}' name='tipoI' checked/>
+								<input type='radio' value='{{tipo.idT}}' name='tipoI' checked/>
 							</td>
 						</tr>
 					{%endfor%}
@@ -28,8 +28,8 @@
 		</div>
 		<br>
 		<input type='submit' class='btn btn-default' value='Crear Tipo Ítem' onclick='document.getElementById("form1").action="/CrearTipoI/"'/>
-		<input type='submit' class='btn btn-default' value='Editar Tipo Ítem' onclick='document.getElementById("form1").action="/EditarTipoI/"'/>
-		<input type='submit' class='btn btn-default' value='Eliminar Tipo Ítem' onclick='document.getElementById("form1").action="/EliminarTipoI/"'/>
+		<input id='Ti1' type='submit' class='btn btn-default' value='Editar Tipo Ítem' onclick='document.getElementById("form1").action="/EditarTipoI/"'/>
+		<input id='Ti2' type='submit' class='btn btn-default' value='Eliminar Tipo Ítem' onclick='document.getElementById("form1").action="/EliminarTipoI/"'/>
 	</form>
 	
 	<form id='form2' method='POST'>{%csrf_token%}
@@ -61,10 +61,33 @@
 		</div>
 		<br>
 		<input type='submit' class='btn btn-default' value='Crear Ítem' onclick='document.getElementById("form2").action="/CrearI/"'/>
-		<input type='submit' class='btn btn-default' value='Editar Ítem' onclick='document.getElementById("form2").action="/EditarI/"'/>
-		<input type='submit' class='btn btn-default' value='Eliminar Ítem' onclick='document.getElementById("form2").action="/EliminarI/"'/>
+		<input type='submit' id='I1' class='btn btn-default' value='Editar Ítem' onclick='document.getElementById("form2").action="/EditarI/"'/>
+		<input type='submit' id='I2' class='btn btn-default' value='Eliminar Ítem' onclick='document.getElementById("form2").action="/EliminarI/"'/>
 	</form>
 	
+	{%if tiposItem%}
+		<script type="text/javascript">
+			document.getElementById('Ti1').disabled=false;
+			document.getElementById('Ti2').disabled=false;
+		</script>
+	{%else%}
+		<script type="text/javascript">
+			document.getElementById('Ti1').disabled=true;
+			document.getElementById('Ti2').disabled=true;
+		</script>
+	{%endif%}
+
+	{%if items%}
+		<script type="text/javascript">
+			document.getElementById('I1').disabled=false;
+			document.getElementById('I2').disabled=false;
+		</script>
+	{%else%}
+		<script type="text/javascript">
+			document.getElementById('I1').disabled=true;
+			document.getElementById('I2').disabled=true;
+		</script>
+	{%endif%}
 	
 {%endblock%}
 {%block js%}

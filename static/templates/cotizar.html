@@ -15,22 +15,22 @@
 		<form id="datos1" method="POST" action="/CotizarEv/">{%csrf_token%}
 		    <div class="col-xs-6">
 		    	<h3>Datos de Contacto:</h3>
-		    	<label for="nombre">Nombre:</label>
+		    	<label for="nombre">Nombre*:</label>
 		    	<input title="el nombre es obligatorio" type="text" name="nombre" class="form-control" value="{{nombre}}"required/>
-		    	<label for="apellido">Apellido:</label>
+		    	<label for="apellido">Apellido*:</label>
 	    		<input title="el apellido es obligatorio" name="apellido" type="text" class="form-control" required/>
-	    		<label for="phone">Número de contacto:</label>
-	    		<input title="ejemplo: 123456789" pattern="\d{9}$" name="phone" class="form-control" required/>
-	    		<label for="email">E-mail:</label>
+	    		<label for="phone">Número de contacto*:</label>
+	    		<input title="El numero debe tener 8 dígitos" pattern="\d{8}$" name="phone" class="form-control" required/>
+	    		<label for="email">E-mail*:</label>
 	    		<input title="ejemplo: mail@ejemplo.com" type="email" name="email" class="form-control" required/>
 		    </div>
 		    <div class="col-xs-6">
 		    	<h3>Dirección del Evento:</h3>
-		    	<label for="Comuna">Comuna Evento:</label>
+		    	<label for="Comuna">Comuna Evento*:</label>
 	    		<input title="ejemplo: La Granja" type="text" name="comuna" class="form-control" required/>
 	    		<label for="calle">Calle/Pasaje:</label>
 	    		<input title="ejemplo: Avenida La Florida" type="text" name="calle" class="form-control" required/>
-	    		<label for="dir">Número:</label>
+	    		<label for="dir">Número*:</label>
 	    		<input type="text" name="dir" class="form-control" pattern="\d{1,6}|\d{1,6}[a-zA-Z]" required/>
 	    		<div class="row">
 	    			<div class="col-xs-6">
@@ -48,6 +48,7 @@
 	    			<input type="submit" name="siguiente1" class="btn-lat btn btn-default frente" value="siguiente">
 	    		</div>
 		    </div>
+		    <label>Los campos marcados con * son obligatorios</label>
 	    </form>
     </div>
 {%endblock%}
