@@ -11,16 +11,17 @@
 		    			<tr>
 		    				<td> {{ items.nombre_item }} </td>
 		    				<td>
-		    					<input type="checkbox" name="seleccion" value="{{ items }}"><br>
+		    					<input type="checkbox" name="checks" value="{{ items.nombre_item }}"><br>
 							</td>
 		    			</tr>
 		    		{%endfor%}
 	    		</table>
 	    		</div>
 	    		<div class="col-xs-10">
-		    		<input type="submit" name="volver_home" class="btn btn-default frente" value="Volver" onclick="document.getElementById('tievEM').action='/TipoEvento/'">
-					<input type="submit" name="siguiente2" class="btn btn-default frente" style="margin:10px;" value="Agregar Item">
-					<input type="submit" name="siguiente2" class="btn btn-default frente" value="Elminiar Item">
+	    			<input type="submit" name="volver_home" class="btn btn-default frente" value="Volver a Eventos" onclick="document.getElementById('tievEM').action='/TipoEvento/'">
+	    			<a href="javascript:history.back()" class="btn btn-default frente">Volver a Menus</a>
+					<input type="submit" name="agregar_item" class="btn btn-default frente" value="Agregar Item" onclick="document.getElementById('tievEM').action='/AgregarItemMenu/'">
+					<input type="submit" name="eliminar_item" class="btn btn-default frente" value="Elminiar Item" onclick="document.getElementById('tievEM').action='/ElminarItemMenu/'">
 	    		</div>
 	    		
     	</form>

@@ -49,7 +49,10 @@ urlpatterns = patterns('',
     url(r'^TipoEventoAddMenu/',Administracion().llamadaTipoEventoAddMenu),
     url(r'^TipoEventoEdMenu/',Administracion().llamadaTipoEventoEdMenu),
     url(r'^TipoEventoEdCheck/',Administracion().llamadaTipoEventoEdCheck),
+    url(r'^TipoEventoEdCheck2/',Administracion().llamadaTipoEventoEdCheck2),
     url(r'^TipoEventoEMenu/',Administracion().llamadaTipoEventoEMenu),
+    url(r'^ElminarItemMenu/',Administracion().eliminarItemMenu),
+    url(r'^AgregarItemMenu/',Administracion().agregarItemMenu),
 
     # url(r'^blog/', include('blog.urls')),
 ) 

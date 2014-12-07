@@ -1,32 +1,29 @@
 {%extends "base2.html"%}
 {%block body%}
-				<div class="row">
-		    		<div class="col-xs-3"></div>
-		    		<h3>Eventos:</h3>
-	    			<div class="col-xs-6">
-	    				<form id="agregar" method="POST" action="/TipoEventoEditar/">{%csrf_token%}
-				    		<table class="table table-condensed">
-					    			{% for items in tipos_evento %}
-					    			<tr>
-					    				<td> {{ items }} </td>
-					    				<td>
-					    					<input type="radio" name="seleccion" value="{{ items }}" checked><br>
-										</td>
-					    			</tr>
-					    			{%endfor%}
-				    		</table>
-				    		<div class="col-xs-6" style="padding-right:0;">
-		    					<input type="submit" id="EE" name="siguiente1" class="btn-lat btn btn-default frente" value="Editar Evento">
-		    				</div>
-	    				</form>
-	    				<form id="agregar" method="POST" action="/TipoEventoAgregar/">{%csrf_token%}
-	    					<div class="col-xs-6" style="padding-right:0;">
-		    					<input type="submit" name="siguiente2" class="btn-lat btn btn-default frente" value="Agregar Evento">
-		    				</div>
-		    			</form>
-		    		</div>
-					<div class="col-xs-3"></div>
-				</div>
+			<h2>Eventos:</h2>	
+	   			<form id="tipoevento" method="POST">{%csrf_token%}
+					<div class="row" style='overflow:auto; height:220px'>
+			    		<table class="table table-condensed">
+			    			<thead>
+								<tr>
+									<th>Tipo Evento</th>	
+									<th>Selección</th>
+								</tr>
+							</thead>
+			    			{% for items in tipos_evento %}
+			    			<tr>
+			    				<td> {{ items }} </td>
+			    				<td>
+			    					<input type="radio" name="seleccion" value="{{ items }}" checked><br>
+								</td>
+			    			</tr>
+			    			{%endfor%}
+			    		</table>	
+    				</div>
+    				<br>
+    				<input type="submit" id="EE" name="siguiente1" class="btn btn-default frente" value="Editar Evento" onclick='document.getElementById("tipoevento").action="/TipoEventoEditar/"'>
+    				<input type="submit" name="siguiente2" class="btn btn-default frente" value="Agregar Evento" onclick='document.getElementById("tipoevento").action="/TipoEventoAgregar/"'>
+				</form>
 				{%if tipos_evento%}
 					<script type="text/javascript">
 						document.getElementById('EE').disabled=false;
