@@ -26,8 +26,8 @@
 						<div class='row col-xs-12'>
 							<div class='col-xs-3'></div>
 							<div class='col-xs-9 row'>
-								<p>Hola {{nombre}} {{apellido}}</p>
-								<a id="np" type="button" class="btn btn-default frente col-xs-12" href="">Cerrar Sesión</a>
+								<p>Hola {{nombre | title}} {{apellido | title}}</p>
+								<a id="np" type="button" class="btn btn-default frente col-xs-12" href="/Login/">Cerrar Sesión</a>
 							</div>
 						</div>
 					</div>
@@ -66,7 +66,7 @@
 							<a type='button' class='btn btn-default frente' href="/Notificaciones/" >Notificaciones</a>
 						</div>
 						<div class="btn-group">
-							<a type='button' class='btn btn-default frente' href="/Menu/" >Menu</a>
+							<a type='button' class='btn btn-default frente' href="/Item/" >Ítems</a>
 						</div>
 					</div>
 				</div>

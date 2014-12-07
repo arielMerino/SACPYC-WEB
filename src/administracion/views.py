@@ -166,13 +166,242 @@ class Administracion(TemplateView):
 
 
 
-	def llamadaMenu(self,request):
+	def llamadaItem(self,request):
 		self.context['nombre']=request.session['nombre']
 		self.context['apellido']=request.session['apellido']
 		if self.context['nombre']==None:
 			self.context['error']='Debes iniciar sesión*'
 			return render(request,'login.html',self.context)
-		return render(request,'menu.html',self.context)
+
+		items = Item.objects.all()
+		tipositem = TipoItem.objects.all()
+
+		listaItems = []
+		listaTipos = []
+
+		for tipo in tipositem:
+			dicc = {}
+			contador = 0
+			dicc['idT'] = tipo.idtipo
+			dicc['nombreT'] = tipo.nombre_tipo
+			for item in items:
+				if item.idtipo == tipo:
+					contador+=1
+			dicc['cantidadT'] = contador
+			listaTipos.append(dicc)
+
+		for item in items:
+			dicc = {}
+			dicc['idI'] = item.iditem
+			dicc['idT'] = item.idtipo
+			dicc['idTstr'] = item.idtipo.nombre_tipo
+			dicc['nombreI'] = item.nombre_item
+			dicc['cantidadIn'] = 0
+			listaItems.append(dicc)
+
+		self.context['tiposItem'] = listaTipos
+		self.context['items'] = listaItems
+
+		return render(request,'item.html',self.context)
+
+	def crearItem(self,request):
+		items = Item.objects.all()
+		tipositem = TipoItem.objects.all()
+
+		listaItems = []
+		listaTipos = []
+
+		for tipo in tipositem:
+			dicc = {}
+			contador = 0
+			dicc['idT'] = tipo.idtipo
+			dicc['nombreT'] = tipo.nombre_tipo
+			for item in items:
+				if item.idtipo == tipo:
+					contador+=1
+			dicc['cantidadT'] = contador
+			listaTipos.append(dicc)
+
+		for item in items:
+			dicc = {}
+			dicc['idI'] = item.iditem
+			dicc['idT'] = item.idtipo
+			dicc['idTstr'] = item.idtipo.nombre_tipo
+			dicc['nombreI'] = item.nombre_item
+			dicc['cantidadIn'] = 0
+			listaItems.append(dicc)
+
+		self.context['tiposItem'] = listaTipos
+		self.context['items'] = listaItems
+
+		return render(request,'itemAd.html',self.context)
+	def editarItem(self,request):
+		idI = request.POST.get('item')
+		item = Item.objects.get(iditem=idI)
+		self.context['iditem'] = idI
+		self.context['idtipo'] = item.idtipo.idtipo
+		self.context['nombre_item'] = item.nombre_item
+		self.context['tipoItem'] = item.idtipo.nombre_tipo
+
+		items = Item.objects.all()
+		tipositem = TipoItem.objects.all()
+
+		listaItems = []
+		listaTipos = []
+
+		for tipo in tipositem:
+			dicc = {}
+			contador = 0
+			dicc['idT'] = tipo.idtipo
+			dicc['nombreT'] = tipo.nombre_tipo
+			for item in items:
+				if item.idtipo == tipo:
+					contador+=1
+			dicc['cantidadT'] = contador
+			listaTipos.append(dicc)
+			print dicc['idT']
+
+		for item in items:
+			dicc = {}
+			dicc['idI'] = item.iditem
+			dicc['idT'] = item.idtipo
+			dicc['idTstr'] = item.idtipo.nombre_tipo
+			dicc['nombreI'] = item.nombre_item
+			dicc['cantidadIn'] = 0
+			listaItems.append(dicc)
+
+		print self.context['idtipo']
+
+		self.context['tiposItem'] = listaTipos
+		self.context['items'] = listaItems
+
+		return render(request,'itemUp.html',self.context)
+
+	def validarCrearItem(self,request):
+		nombreI = request.POST.get('nombreI')
+		tipoI = request.POST.get('tipoI')
+		idtipo = TipoItem.objects.get(idtipo=tipoI)
+		item = Item(nombre_item=nombreI,idtipo=idtipo)
+		item.save()
+
+		items = Item.objects.all()
+		tipositem = TipoItem.objects.all()
+
+		listaItems = []
+		listaTipos = []
+
+		for tipo in tipositem:
+			dicc = {}
+			contador = 0
+			dicc['idT'] = tipo.idtipo
+			dicc['nombreT'] = tipo.nombre_tipo
+			for item in items:
+				if item.idtipo == tipo:
+					contador+=1
+			dicc['cantidadT'] = contador
+			listaTipos.append(dicc)
+
+		for item in items:
+			dicc = {}
+			dicc['idI'] = item.iditem
+			dicc['idT'] = item.idtipo
+			dicc['idTstr'] = item.idtipo.nombre_tipo
+			dicc['nombreI'] = item.nombre_item
+			dicc['cantidadIn'] = 0
+			listaItems.append(dicc)
+
+		self.context['tiposItem'] = listaTipos
+		self.context['items'] = listaItems
+
+		return render(request,'item.html',self.context)
+
+	def crearTipoItem(self,request):
+		return render(request,'tipoItemAd.html',self.context)
+
+	def editarTipoItem(self,request):
+		self.context['id'] = request.POST.get('tipoI')
+
+		return render(request,'item.html',self.context)
+
+	def eliminarTipoItem(self,request):
+		return render(request,'item.html',self.context)
+
+	def validarCrearTipoItem(self,request):
+		nombreT = request.POST.get('nombreT')
+
+		tiposI = TipoItem.objects.filter(nombre_tipo=nombreT)
+		if tiposI.count() > 0:
+			items = Item.objects.all()
+			tipositem = TipoItem.objects.all()
+
+			listaItems = []
+			listaTipos = []
+
+			for tipo in tipositem:
+				dicc = {}
+				contador = 0
+				dicc['idT'] = tipo.idtipo
+				dicc['nombreT'] = tipo.nombre_tipo
+				for item in items:
+					if item.idtipo == tipo:
+						contador+=1
+				dicc['cantidadT'] = contador
+				listaTipos.append(dicc)
+
+			for item in items:
+				dicc = {}
+				dicc['idI'] = item.iditem
+				dicc['idT'] = item.idtipo
+				dicc['idTstr'] = item.idtipo.nombre_tipo
+				dicc['nombreI'] = item.nombre_item
+				dicc['cantidadIn'] = 0
+				listaItems.append(dicc)
+
+			self.context['tiposItem'] = listaTipos
+			self.context['items'] = listaItems
+			self.context['error'] = 'ERROR - El tipo de ítem ya ue ingresado'
+			return render(request,'tipoItemAd.html',self.context)
+		tipoItem = TipoItem(nombre_tipo=nombreT)
+		tipoItem.save()
+
+		iitems = Item.objects.all()
+		tipositem = TipoItem.objects.all()
+
+		listaItems = []
+		listaTipos = []
+
+		for tipo in tipositem:
+			dicc = {}
+			contador = 0
+			dicc['idT'] = tipo.idtipo
+			dicc['nombreT'] = tipo.nombre_tipo
+			for item in items:
+				if item.idtipo == tipo:
+					contador+=1
+			dicc['cantidadT'] = contador
+			listaTipos.append(dicc)
+
+		for item in items:
+			dicc = {}
+			dicc['idI'] = item.iditem
+			dicc['idT'] = item.idtipo
+			dicc['idTstr'] = item.idtipo.nombre_tipo
+			dicc['nombreI'] = item.nombre_item
+			dicc['cantidadIn'] = 0
+			listaItems.append(dicc)
+
+		self.context['tiposItem'] = listaTipos
+		self.context['items'] = listaItems
+
+		return render(request,'item.html',self.context)
+
+	def validarEditarTipoItem(self,request):
+
+
+		return render(request,'item.html',self.context)
+
+	def validarEliminarTipoItem(self,request):
+		return render(request,'item.html',self.context)
 
 	def llamadaNotificaciones(self,request):
 		self.context['nombre']=request.session['nombre']
@@ -188,6 +417,205 @@ class Administracion(TemplateView):
 		if self.context['nombre']==None:
 			self.context['error']='Debes iniciar sesión*'
 			return render(request,'login.html',self.context)
+
+		ProvI = ProveedorIngrediente.objects.all()
+		ProvU = ProveedorUtensilio.objects.all()
+		proveedores = []
+		for prov in ProvI:
+			proveedor = {}
+			proveedor['id']=prov.idproveedoringrediente
+			proveedor['nombre']=prov.nombre_proveedor_ingrediente
+			proveedor['telefono']=prov.telefono_proveedor_ingrediente
+			proveedor['direccion']=prov.direccion_proveedor_ingrediente
+			proveedor['tipo']='ingredientes'
+			proveedores.append(proveedor)
+
+		for prov in ProvU:
+			proveedor = {}
+			proveedor['id']=prov.idproveedorutensilio
+			proveedor['nombre']=prov.nombre_proveedor_utensilio
+			proveedor['telefono']=prov.telefono_proveedor_utensilio
+			proveedor['direccion']=prov.direccion_proveedor_utensilio
+			proveedor['tipo']='utensilios'
+			proveedores.append(proveedor)
+
+		self.context['proveedores']=proveedores
+		return render(request,'proveedores.html',self.context)
+
+	def proveedoresAd(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
+		return render(request,'proveedoresAd.html',self.context)
+
+	def proveedoresUp(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
+
+		datosProv = request.POST.get('proveedor')
+		tipo = datosProv.split(';')[0]
+		ID = datosProv.split(';')[1]
+		self.context['tipoP']=tipo
+		self.context['idP']=ID
+		request.session['tipoP']=tipo
+		request.session['idP']=ID
+
+		if tipo == 'ingredientes':
+			prov = ProveedorIngrediente.objects.get(idproveedoringrediente=ID)
+			self.context['nombreP'] = prov.nombre_proveedor_ingrediente
+			self.context['telefonoP'] = prov.telefono_proveedor_ingrediente
+			self.context['direccionP'] = prov.direccion_proveedor_ingrediente
+		else:
+			prov = ProveedorUtensilio.objects.get(idproveedorutensilio=ID)
+			self.context['nombreP'] = prov.nombre_proveedor_utensilio
+			self.context['telefonoP'] = prov.telefono_proveedor_utensilio
+			self.context['direccionP'] = prov.direccion_proveedor_utensilio
+
+		return render(request,'proveedoresUp.html',self.context)
+
+	def proveedoresDel(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
+
+		datosProv = request.POST.get('proveedor')
+		tipo = datosProv.split(';')[0]
+		ID = datosProv.split(';')[1]
+		self.context['tipoP']=tipo
+		self.context['idP']=ID
+
+		if tipo == 'ingredientes':
+			prov = ProveedorIngrediente.objects.get(idproveedoringrediente=ID)
+		else:
+			prov = ProveedorUtensilio.objects.get(idproveedorutensilio=ID)
+		prov.delete()
+
+		ProvI = ProveedorIngrediente.objects.all()
+		ProvU = ProveedorUtensilio.objects.all()
+		proveedores = []
+		for prov in ProvI:
+			proveedor = {}
+			proveedor['id']=prov.idproveedoringrediente
+			proveedor['nombre']=prov.nombre_proveedor_ingrediente
+			proveedor['telefono']=prov.telefono_proveedor_ingrediente
+			proveedor['direccion']=prov.direccion_proveedor_ingrediente
+			proveedor['tipo']='ingredientes'
+			proveedores.append(proveedor)
+
+		for prov in ProvU:
+			proveedor = {}
+			proveedor['id']=prov.idproveedorutensilio
+			proveedor['nombre']=prov.nombre_proveedor_utensilio
+			proveedor['telefono']=prov.telefono_proveedor_utensilio
+			proveedor['direccion']=prov.direccion_proveedor_utensilio
+			proveedor['tipo']='utensilios'
+			proveedores.append(proveedor)
+
+		self.context['proveedores']=proveedores
+		return render(request,'proveedores.html',self.context)
+
+	def validarProveedoresUp(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
+
+		tipo = request.session['tipoP']
+		print tipo
+
+		if tipo == 'Proveedor de Ingredientes' or tipo == 'ingredientes':
+			tipo = 'ingredientes'
+		else:
+			tipo = 'utensilios'
+		ID = request.session['idP']
+		request.session['tipoP']=None
+		request.session['idP']=None
+		if tipo == 'ingredientes':
+			prov = ProveedorIngrediente.objects.get(idproveedoringrediente=ID)
+			prov.nombre_proveedor_ingrediente = request.POST.get('nombreP')
+			prov.telefono_proveedor_ingrediente = request.POST.get('telefonoP')
+			prov.direccion_proveedor_ingrediente = request.POST.get('direccionP')
+		else:
+			prov = ProveedorUtensilio.objects.get(idproveedorutensilio=ID)
+			prov.nombre_proveedor_utensilio = request.POST.get('nombreP')
+			prov.telefono_proveedor_utensilio = request.POST.get('telefonoP')
+			prov.direccion_proveedor_utensilio = request.POST.get('direccionP')
+		prov.save()
+
+		ProvI = ProveedorIngrediente.objects.all()
+		ProvU = ProveedorUtensilio.objects.all()
+		proveedores = []
+		for prov in ProvI:
+			proveedor = {}
+			proveedor['id']=prov.idproveedoringrediente
+			proveedor['nombre']=prov.nombre_proveedor_ingrediente
+			proveedor['telefono']=prov.telefono_proveedor_ingrediente
+			proveedor['direccion']=prov.direccion_proveedor_ingrediente
+			proveedor['tipo']='ingredientes'
+			proveedores.append(proveedor)
+
+		for prov in ProvU:
+			proveedor = {}
+			proveedor['id']=prov.idproveedorutensilio
+			proveedor['nombre']=prov.nombre_proveedor_utensilio
+			proveedor['telefono']=prov.telefono_proveedor_utensilio
+			proveedor['direccion']=prov.direccion_proveedor_utensilio
+			proveedor['tipo']='utensilios'
+			proveedores.append(proveedor)
+
+		self.context['proveedores']=proveedores
+		return render(request,'proveedores.html',self.context)
+
+	def validarProveedoresAd(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
+
+		nombre = request.POST.get('nombreP')
+		telefono = request.POST.get('telefonoP')
+		direccion = request.POST.get('direccionP')
+		tipo = request.POST.get('tipoP')
+
+		if tipo == 'ingredientes':
+			prov = ProveedorIngrediente(nombre_proveedor_ingrediente=nombre, telefono_proveedor_ingrediente=telefono,direccion_proveedor_ingrediente=direccion)
+		else:
+			prov = ProveedorUtensilio(nombre_proveedor_utensilio=nombre,telefono_proveedor_utensilio=telefono,direccion_proveedor_utensilio=direccion)
+
+		prov.save()
+
+		ProvI = ProveedorIngrediente.objects.all()
+		ProvU = ProveedorUtensilio.objects.all()
+		proveedores = []
+		for prov in ProvI:
+			proveedor = {}
+			proveedor['id']=prov.idproveedoringrediente
+			proveedor['nombre']=prov.nombre_proveedor_ingrediente
+			proveedor['telefono']=prov.telefono_proveedor_ingrediente
+			proveedor['direccion']=prov.direccion_proveedor_ingrediente
+			proveedor['tipo']='ingredientes'
+			proveedores.append(proveedor)
+
+		for prov in ProvU:
+			proveedor = {}
+			proveedor['id']=prov.idproveedorutensilio
+			proveedor['nombre']=prov.nombre_proveedor_utensilio
+			proveedor['telefono']=prov.telefono_proveedor_utensilio
+			proveedor['direccion']=prov.direccion_proveedor_utensilio
+			proveedor['tipo']='utensilios'
+			proveedores.append(proveedor)
+
+		self.context['proveedores']=proveedores
+
 		return render(request,'proveedores.html',self.context)
 
 	def llamadaTipoEvento(self,request):
@@ -254,6 +682,8 @@ class Administracion(TemplateView):
 		return render(request,'tipoeventoEditar.html',self.context)
 
 	def llamadaLogin(self,request):
+		request.session['nombre']=None
+		request.session['apellido']=None
 		return render(request,'login.html',self.context)
 
 	def validarLogin(self,request):

@@ -1,16 +1,53 @@
 {%extends "base2.html"%}
+{%block menuIzq%}
+{%endblock%}
 {%block body%}
-				<div class="row">
-	    		<div class="col-xs-3"></div>
-	    		<h3>Lista Proveedores:</h3>
-	    		
-				<div class="col-xs-3"></div>
-			</div>
+	<h2>Administración de Proveedores:</h2>
+	<form id='form1' method='POST'>{% csrf_token %}
+		<table class='table table-condensed'>
+			<thead>
+				<tr>
+					<th>Nombre</th>
+					<th>Teléfono</th>
+					<th>Dirección</th>
+					<th>Tipo</th>
+					<th>Selección</th>
+				</tr>
+			</thead>
+			{%for proveedor in proveedores%}
+				<tr>
+					<td>{{proveedor.nombre}}</td>
+					<td>{{proveedor.telefono}}</td>
+					<td>{{proveedor.direccion}}</td>
+					<td>{{proveedor.tipo}}</td>
+					<td>
+						<input type='radio' value='{{proveedor.tipo}};{{proveedor.id}}' name='proveedor' checked/>
+					</td>
+				</tr>
+			{%endfor%}
+		</table>
+		<input type="submit" class='btn btn-default frente' value='Agregar Proveedor' onclick="document.getElementById('form1').action='/ProveedoresAd/'">
+		<input type="submit" id='UG' class='btn btn-default frente' value='Editar Proveedor' onclick="document.getElementById('form1').action='/ProveedoresUp/'">
+		<input type="submit" id='DG' class='btn btn-default frente' value='Eliminar Proveedor' onclick="document.getElementById('form1').action='/ProveedoresDel/'">
+	</form>
 
+	{%if proveedores%}
+		<script type="text/javascript">
+			document.getElementById('UG').disabled=false;
+			document.getElementById('DG').disabled=false;
+		</script>
+	{%else%}
+		<script type="text/javascript">
+			document.getElementById('UG').disabled=true;
+			document.getElementById('DG').disabled=true;
+		</script>
+	{%endif%}
+
+	<a href=""></a>
 {%endblock%}
 {%block js%}
 	<script type="text/javascript" src="/static/js/bootstrap-datepicker.js"></script>
 	<script type="text/javascript">
-	document.getElementById('pro').className="btn btn-default active";
+	document.getElementById('gar').className="btn btn-default active";
 	</script>
 {%endblock%}

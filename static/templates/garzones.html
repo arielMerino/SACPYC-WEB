@@ -4,29 +4,34 @@
 {%block body%}
 	<h2>Administración de Garzones:</h2>
 	<form id='form1' method='POST'>{% csrf_token %}
-		<table class='table table-condensed'>
-			<tr>
-				<td>Nombre</td>
-				<td>Correo</td>
-				<td>Teléfono</td>
-				<td>Selección</td>
-			</tr>
-			{%for garzon in garzones%}
-				<tr>
-					<td>{{garzon.nombre}} {{garzon.apellido}}</td>
-					<td>{{garzon.correo}}</td>
-					<td>{{garzon.telefono}}</td>
-					<td>
-						<input type='radio' value='{{garzon.correo}}' name='correo_garzon' checked/>
-					</td>
-				</tr>
-			{%endfor%}
-		</table>
-		<input type="submit" class='btn btn-default frente' value='Crear Garzon' onclick="document.getElementById('form1').action='/GarzonesAd/'">
+		<div style='height:300px;overflow:auto;'>
+			<table class='table table-striped'>
+				<thead class='header-fixed'>
+					<tr>
+						<th>Nombre</th>
+						<th>Correo</th>
+						<th>Teléfono</th>
+						<th>Selección</th>
+					</tr>
+				</thead>
+				{%for garzon in garzones%}
+					<tr>
+						<td class='filterable-cell'>{{garzon.nombre}} {{garzon.apellido}}</td>
+						<td class='filterable-cell'>{{garzon.correo}}</td>
+						<td class='filterable-cell'>{{garzon.telefono}}</td>
+						<td>
+							<input type='radio' value='{{garzon.correo}}' name='correo_garzon' checked/>
+						</td>
+					</tr>
+				{%endfor%}
+			</table>
+			
+		</div>
+		<br>
+	<input type="submit" class='btn btn-default frente' value='Crear Garzon' onclick="document.getElementById('form1').action='/GarzonesAd/'">
 		<input type="submit" id='UG' class='btn btn-default frente' value='Editar Garzon' onclick="document.getElementById('form1').action='/GarzonesEd/'">
 		<input type="submit" id='DG' class='btn btn-default frente' value='Eliminar Garzon' onclick="document.getElementById('form1').action='/GarzonesDel/'">
 	</form>
-
 	{%if garzones%}
 		<script type="text/javascript">
 			document.getElementById('UG').disabled=false;

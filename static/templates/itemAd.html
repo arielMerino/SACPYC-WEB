@@ -1,0 +1,30 @@
+{%extends "base2.html"%}
+{%block body%}
+	<div class="row">
+		<div class='col-xs-3'></div>
+		
+		<div class="col-xs-6">
+			<h2>Crear Ítem:</h2>
+			<form method='POST' action='/ValidarCrearI/'/>{%csrf_token%}
+				<label for='nompreI'>Nombre Ítem*:</label>
+				<input type='text' name='nombreI' class='form-control' required/>
+				<label for='tipoI'>Tipo ítem*:</label>
+				<select name='tipoI' class='form-control'>
+					{%for tipo in tiposItem%}
+						<option value='{{tipo.idT}}'>{{tipo.nombreT}}</option>
+					{%endfor%}
+				</select>
+				<br>
+				<input type='submit' class='btn btn-default' value='aceptar' />
+			</form>
+		</div>
+	</div>
+
+
+{%endblock%}
+{%block js%}
+	<script type="text/javascript" src="/static/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript">
+	document.getElementById('gar').className="btn btn-default active";
+	</script>
+{%endblock%}

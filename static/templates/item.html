@@ -1,0 +1,75 @@
+{%extends "base2.html"%}
+{%block body%}
+	<h2>Administración de Items:</h2>
+	<form id='form1' method='POST'>{%csrf_token%}
+		<br>
+		<h3>Tipos de Ítems:</h3>
+		<div class='row' style='overflow:auto; height:180px'>
+			<table class='table table-striped'>
+				<thead>
+					<tr>
+						<th>Tipo Ítem</th>
+						<th>Cantidad de Ítems</th>	
+						<th>Selección</th>
+					</tr>
+				</thead>
+				<tbody>
+					{%for tipo in tiposItem%}
+						<tr>
+							<td>{{tipo.nombreT}}</td>
+							<td>{{tipo.cantidadT}}</td>
+							<td>
+								<input type='radio' value='{{tipo.idtipo}}' name='tipoI' checked/>
+							</td>
+						</tr>
+					{%endfor%}
+				</tbody>
+			</table>
+		</div>
+		<br>
+		<input type='submit' class='btn btn-default' value='Crear Tipo Ítem' onclick='document.getElementById("form1").action="/CrearTipoI/"'/>
+		<input type='submit' class='btn btn-default' value='Editar Tipo Ítem' onclick='document.getElementById("form1").action="/EditarTipoI/"'/>
+		<input type='submit' class='btn btn-default' value='Eliminar Tipo Ítem' onclick='document.getElementById("form1").action="/EliminarTipoI/"'/>
+	</form>
+	
+	<form id='form2' method='POST'>{%csrf_token%}
+		<br>
+		<h3>Ítems:</h3>
+		<div class='row' style='overflow:auto; height:180px'>		
+			<table class='table table-striped'>
+				<thead>
+					<tr>
+						<th>Ítem</th>
+						<th>Tipo de Ítem</th>
+						<th>Cantidad de Ingredientes</th>
+						<th>Selección</th>
+					</tr>
+				</thead>
+				<tbody>
+					{%for item in items%}
+						<tr>
+							<td>{{item.nombreI}}</td>
+							<td>{{item.idTstr}}</td>
+							<td>{{item.cantidadIn}}</td>
+							<td>
+								<input type='radio' value='{{item.idI}}' name='item' checked/>
+							</td>
+						</tr>
+					{%endfor%}
+				</tbody>
+			</table>
+		</div>
+		<br>
+		<input type='submit' class='btn btn-default' value='Crear Ítem' onclick='document.getElementById("form2").action="/CrearI/"'/>
+		<input type='submit' class='btn btn-default' value='Editar Ítem' onclick='document.getElementById("form2").action="/EditarI/"'/>
+		<input type='submit' class='btn btn-default' value='Eliminar Ítem' onclick='document.getElementById("form2").action="/EliminarI/"'/>
+	</form>
+	
+	
+{%endblock%}
+{%block js%}
+	<script type="text/javascript" src="/static/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript">
+	document.getElementById('men').className="btn btn-default active";
+	</script>
+{%endblock%}
