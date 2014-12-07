@@ -6,7 +6,8 @@
 		<div class="col-xs-6">
 			<h2>Crear Ítem:</h2>
 			<form method='POST' action='/ValidarEditarI/'/>{%csrf_token%}
-				<label for='nompreT'>Nombre Ítem*:</label>
+				<label style='color:red'>{{error}}</label><br>
+				<label for='nompreI'>Nombre Ítem*:</label>
 				<input type='text' name='nombreI' class='form-control' value='{{nombre_item}}' required/>
 				<label for='tipoI'>Tipo ítem*:</label>
 				<select name='tipoI' class='form-control'>
