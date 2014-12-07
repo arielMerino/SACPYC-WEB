@@ -1,0 +1,36 @@
+{%extends "base2.html"%}
+{%block body%}
+	<div id="form-1" class="row">
+		<form id="tievEM" method="POST" action="/TipoEventoEMenu/">{%csrf_token%}
+		    	<h3>Editar {{ nombre_evento }}</h3>
+		    	<label for="submenu">Menu {{nombre_tipo_menu}}:</label>
+		    	<br>
+		    	<div class="col-xs-8">
+		   		<table class="table table-condensed">
+    				{% for items in lista_item %}
+		    			<tr>
+		    				<td> {{ items.nombre_item }} </td>
+		    				<td>
+		    					<input type="checkbox" name="seleccion" value="{{ items }}"><br>
+							</td>
+		    			</tr>
+		    		{%endfor%}
+	    		</table>
+	    		</div>
+	    		<div class="col-xs-10">
+		    		<input type="submit" name="volver_home" class="btn btn-default frente" value="Volver" onclick="document.getElementById('tievEM').action='/TipoEvento/'">
+					<input type="submit" name="siguiente2" class="btn btn-default frente" style="margin:10px;" value="Agregar Item">
+					<input type="submit" name="siguiente2" class="btn btn-default frente" value="Elminiar Item">
+	    		</div>
+	    		
+    	</form>
+    </div>
+
+{%endblock%}
+{%block js%}
+	<script type="text/javascript" src="/static/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript">
+	document.getElementById('te').className="btn btn-default active";
+	
+	</script>
+{%endblock%}

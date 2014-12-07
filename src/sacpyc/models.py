@@ -27,8 +27,7 @@ class Administrador(models.Model):
 class AgendamientoEvento(models.Model):
     idagendamientoevento = models.IntegerField(db_column='IDAGENDAMIENTOEVENTO', primary_key=True)  # Field name made lowercase.
     id_cotizacion = models.ForeignKey('Cotizacion', db_column='ID_COTIZACION')  # Field name made lowercase.
-    fecha_agendamiento_evento = models.DateField(db_column='FECHA_AGENDAMIENTO_EVENTO', blank=True, null=True)  # Field name made lowercase.
-    hora_agendamiento_evento = models.TimeField(db_column='HORA_AGENDAMIENTO_EVENTO', blank=True, null=True)  # Field name made lowercase.
+    fecha_agendamiento_evento = models.DateTimeField(db_column='FECHA_AGENDAMIENTO_EVENTO', blank=True, null=True)  # Field name made lowercase.
     duracion_agendamiento_evento = models.IntegerField(db_column='DURACION_AGENDAMIENTO_EVENTO', blank=True, null=True)  # Field name made lowercase.
     estado = models.CharField(db_column='ESTADO', max_length=10, blank=True)  # Field name made lowercase.
 
@@ -50,6 +49,74 @@ class Auditoria(models.Model):
     class Meta:
         managed = False
         db_table = 'auditoria'
+
+
+class AuthGroup(models.Model):
+    id = models.IntegerField(primary_key=True)  # AutoField?
+    name = models.CharField(unique=True, max_length=80)
+
+    class Meta:
+        managed = False
+        db_table = 'auth_group'
+
+
+class AuthGroupPermissions(models.Model):
+    id = models.IntegerField(primary_key=True)  # AutoField?
+    group = models.ForeignKey(AuthGroup)
+    permission = models.ForeignKey('AuthPermission')
+
+    class Meta:
+        managed = False
+        db_table = 'auth_group_permissions'
+
+
+class AuthPermission(models.Model):
+    id = models.IntegerField(primary_key=True)  # AutoField?
+    name = models.CharField(max_length=50)
+    content_type = models.ForeignKey('DjangoContentType')
+    codename = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'auth_permission'
+
+
+class AuthUser(models.Model):
+    id = models.IntegerField(primary_key=True)  # AutoField?
+    password = models.CharField(max_length=128)
+    last_login = models.DateTimeField()
+    is_superuser = models.IntegerField()
+    username = models.CharField(unique=True, max_length=30)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    email = models.CharField(max_length=75)
+    is_staff = models.IntegerField()
+    is_active = models.IntegerField()
+    date_joined = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'auth_user'
+
+
+class AuthUserGroups(models.Model):
+    id = models.IntegerField(primary_key=True)  # AutoField?
+    user = models.ForeignKey(AuthUser)
+    group = models.ForeignKey(AuthGroup)
+
+    class Meta:
+        managed = False
+        db_table = 'auth_user_groups'
+
+
+class AuthUserUserPermissions(models.Model):
+    id = models.IntegerField(primary_key=True)  # AutoField?
+    user = models.ForeignKey(AuthUser)
+    permission = models.ForeignKey(AuthPermission)
+
+    class Meta:
+        managed = False
+        db_table = 'auth_user_user_permissions'
 
 
 class CantidadHistorica(models.Model):
@@ -88,10 +155,11 @@ class CompraIngrediente(models.Model):
 
 
 class CompraIngredienteIngrediente(models.Model):
-    idingrediente = models.ForeignKey('Ingrediente', db_column='IDINGREDIENTE')  # Field name made lowercase.
-    idcompraingrediente = models.ForeignKey(CompraIngrediente, db_column='IDCOMPRAINGREDIENTE')  # Field name made lowercase.
     cantidad_compra_ingrediente = models.IntegerField(db_column='CANTIDAD_COMPRA_INGREDIENTE', blank=True, null=True)  # Field name made lowercase.
     precio_compra_ingrediente = models.IntegerField(db_column='PRECIO_COMPRA_INGREDIENTE', blank=True, null=True)  # Field name made lowercase.
+    idcompraingredienteingrediente = models.IntegerField(db_column='IDCOMPRAINGREDIENTEINGREDIENTE', primary_key=True)  # Field name made lowercase.
+    idingrediente = models.ForeignKey('Ingrediente', db_column='IDINGREDIENTE')  # Field name made lowercase.
+    idcompraingrediente = models.ForeignKey(CompraIngrediente, db_column='IDCOMPRAINGREDIENTE')  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -110,10 +178,11 @@ class CompraUtensilio(models.Model):
 
 
 class CompraUtensilioUtensilio(models.Model):
-    idutensilio = models.ForeignKey('Utensilio', db_column='IDUTENSILIO')  # Field name made lowercase.
-    idcomprautensilio = models.ForeignKey(CompraUtensilio, db_column='IDCOMPRAUTENSILIO')  # Field name made lowercase.
     cantidad_compra_utensilio = models.IntegerField(db_column='CANTIDAD_COMPRA_UTENSILIO', blank=True, null=True)  # Field name made lowercase.
     precio_compra_utensilio = models.IntegerField(db_column='PRECIO_COMPRA_UTENSILIO', blank=True, null=True)  # Field name made lowercase.
+    idcomprautensilioutensilio = models.IntegerField(db_column='IDCOMPRAUTENSILIOUTENSILIO', primary_key=True)  # Field name made lowercase.
+    idcomprautensilio = models.ForeignKey(CompraUtensilio, db_column='IDCOMPRAUTENSILIO')  # Field name made lowercase.
+    idutensilio = models.ForeignKey('Utensilio', db_column='IDUTENSILIO')  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -131,6 +200,53 @@ class Cotizacion(models.Model):
         db_table = 'cotizacion'
 
 
+class DjangoAdminLog(models.Model):
+    id = models.IntegerField(primary_key=True)  # AutoField?
+    action_time = models.DateTimeField()
+    object_id = models.TextField(blank=True)
+    object_repr = models.CharField(max_length=200)
+    action_flag = models.IntegerField()
+    change_message = models.TextField()
+    content_type = models.ForeignKey('DjangoContentType', blank=True, null=True)
+    user = models.ForeignKey(AuthUser)
+
+    class Meta:
+        managed = False
+        db_table = 'django_admin_log'
+
+
+class DjangoContentType(models.Model):
+    id = models.IntegerField(primary_key=True)  # AutoField?
+    name = models.CharField(max_length=100)
+    app_label = models.CharField(max_length=100)
+    model = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'django_content_type'
+
+
+class DjangoMigrations(models.Model):
+    id = models.IntegerField(primary_key=True)  # AutoField?
+    app = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    applied = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'django_migrations'
+
+
+class DjangoSession(models.Model):
+    session_key = models.CharField(primary_key=True, max_length=40)
+    session_data = models.TextField()
+    expire_date = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'django_session'
+
+
 class Garzon(models.Model):
     mail_garzon = models.CharField(db_column='MAIL_GARZON', max_length=45, blank=True)  # Field name made lowercase.
     telefono_garzon = models.IntegerField(db_column='TELEFONO_GARZON', blank=True, null=True)  # Field name made lowercase.
@@ -144,9 +260,10 @@ class Garzon(models.Model):
 
 
 class GarzonEvento(models.Model):
+    respuesta = models.CharField(db_column='RESPUESTA', max_length=5, blank=True)  # Field name made lowercase.
+    idgarzonevento = models.IntegerField(db_column='IDGARZONEVENTO', primary_key=True)  # Field name made lowercase.
     idagendamientoevento = models.ForeignKey(AgendamientoEvento, db_column='IDAGENDAMIENTOEVENTO')  # Field name made lowercase.
     idgarzon = models.ForeignKey(Garzon, db_column='IDGARZON')  # Field name made lowercase.
-    respuesta = models.CharField(db_column='RESPUESTA', max_length=5, blank=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -165,10 +282,11 @@ class Ingrediente(models.Model):
 
 
 class IngredienteItem(models.Model):
-    iditem = models.ForeignKey('Item', db_column='IDITEM')  # Field name made lowercase.
-    idingrediente = models.ForeignKey(Ingrediente, db_column='IDINGREDIENTE')  # Field name made lowercase.
     cantidad_ingrediente_especial = models.IntegerField(db_column='CANTIDAD_INGREDIENTE_ESPECIAL', blank=True, null=True)  # Field name made lowercase.
     unidad_ingrediente_especial = models.CharField(db_column='UNIDAD_INGREDIENTE_ESPECIAL', max_length=10, blank=True)  # Field name made lowercase.
+    idingredienteitem = models.IntegerField(db_column='IDINGREDIENTEITEM', primary_key=True)  # Field name made lowercase.
+    idingrediente = models.ForeignKey(Ingrediente, db_column='IDINGREDIENTE')  # Field name made lowercase.
+    iditem = models.ForeignKey('Item', db_column='IDITEM')  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -176,10 +294,11 @@ class IngredienteItem(models.Model):
 
 
 class IngredienteItemEspecial(models.Model):
-    idingrediente = models.ForeignKey(Ingrediente, db_column='IDINGREDIENTE')  # Field name made lowercase.
-    id_item_especial = models.ForeignKey('ItemEspecial', db_column='ID_ITEM_ESPECIAL')  # Field name made lowercase.
     cantidad_ingrediente_especial = models.IntegerField(db_column='CANTIDAD_INGREDIENTE_ESPECIAL', blank=True, null=True)  # Field name made lowercase.
     unidad_ingrediente_especial = models.CharField(db_column='UNIDAD_INGREDIENTE_ESPECIAL', max_length=10, blank=True)  # Field name made lowercase.
+    idingredienteitemespecial = models.IntegerField(db_column='IDINGREDIENTEITEMESPECIAL', primary_key=True)  # Field name made lowercase.
+    idingrediente = models.ForeignKey(Ingrediente, db_column='IDINGREDIENTE')  # Field name made lowercase.
+    id_item_especial = models.ForeignKey('ItemEspecial', db_column='ID_ITEM_ESPECIAL')  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -209,6 +328,7 @@ class ItemEspecial(models.Model):
 
 
 class ItemMenu(models.Model):
+    iditemmenu = models.IntegerField(db_column='IDITEMMENU', primary_key=True)  # Field name made lowercase.
     idtipomenu = models.ForeignKey('TipoMenu', db_column='IDTIPOMENU')  # Field name made lowercase.
     iditem = models.ForeignKey(Item, db_column='IDITEM')  # Field name made lowercase.
 
@@ -218,9 +338,11 @@ class ItemMenu(models.Model):
 
 
 class ItemSolicitudDeCotizacion(models.Model):
+    cantidad_item = models.IntegerField(db_column='CANTIDAD_ITEM', blank=True, null=True)  # Field name made lowercase.
+    itemsolicitudcotizacion = models.IntegerField(db_column='ITEMSOLICITUDCOTIZACION', primary_key=True)  # Field name made lowercase.
     iditem = models.ForeignKey(Item, db_column='IDITEM')  # Field name made lowercase.
     idsolicitudcotizacion = models.ForeignKey('SolicitudDeCotizacion', db_column='IDSOLICITUDCOTIZACION')  # Field name made lowercase.
-    cantidad_item = models.IntegerField(db_column='CANTIDAD_ITEM', blank=True, null=True)  # Field name made lowercase.
+    precio_item = models.IntegerField(db_column='PRECIO_ITEM', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -280,12 +402,11 @@ class SolicitudDeCotizacion(models.Model):
 class TipoEvento(models.Model):
     idtipoevento = models.IntegerField(db_column='IDTIPOEVENTO', primary_key=True)  # Field name made lowercase.
     nombre_tipo_evento = models.CharField(db_column='NOMBRE_TIPO_EVENTO', max_length=25, blank=True)  # Field name made lowercase.
+    visible = models.IntegerField(db_column='VISIBLE', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
         db_table = 'tipo_evento'
-    def __str__(self):
-        return '%s;%s'%(self.idtipoevento,self.nombre_tipo_evento)
 
 
 class TipoItem(models.Model):
@@ -305,8 +426,6 @@ class TipoMenu(models.Model):
     class Meta:
         managed = False
         db_table = 'tipo_menu'
-    def __str__(self):
-        return '%s;%s;%s'%(self.idtipomenu,self.idtipoevento,self.nombre_tipo_menu)
 
 
 class TipoUtensilio(models.Model):
@@ -331,10 +450,11 @@ class Utensilio(models.Model):
 
 
 class UtensilioEvento(models.Model):
-    idagendamientoevento = models.ForeignKey(AgendamientoEvento, db_column='IDAGENDAMIENTOEVENTO')  # Field name made lowercase.
-    idutensilio = models.ForeignKey(Utensilio, db_column='IDUTENSILIO')  # Field name made lowercase.
     utensilios_utilizados = models.IntegerField(db_column='UTENSILIOS_UTILIZADOS', blank=True, null=True)  # Field name made lowercase.
     utensilios_rotos = models.IntegerField(db_column='UTENSILIOS_ROTOS', blank=True, null=True)  # Field name made lowercase.
+    idutensilioevento = models.IntegerField(db_column='IDUTENSILIOEVENTO', primary_key=True)  # Field name made lowercase.
+    idutensilio = models.ForeignKey(Utensilio, db_column='IDUTENSILIO')  # Field name made lowercase.
+    idagendamientoevento = models.ForeignKey(AgendamientoEvento, db_column='IDAGENDAMIENTOEVENTO')  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -342,10 +462,11 @@ class UtensilioEvento(models.Model):
 
 
 class UtensilioItem(models.Model):
-    iditem = models.ForeignKey(Item, db_column='IDITEM')  # Field name made lowercase.
-    idutensilio = models.ForeignKey(Utensilio, db_column='IDUTENSILIO')  # Field name made lowercase.
     cantidaditem = models.IntegerField(db_column='CANTIDADITEM', blank=True, null=True)  # Field name made lowercase.
     cantidadutensilio = models.IntegerField(db_column='CANTIDADUTENSILIO', blank=True, null=True)  # Field name made lowercase.
+    idutensilioitem = models.IntegerField(db_column='IDUTENSILIOITEM', primary_key=True)  # Field name made lowercase.
+    iditem = models.ForeignKey(Item, db_column='IDITEM')  # Field name made lowercase.
+    idutensilio = models.ForeignKey(Utensilio, db_column='IDUTENSILIO')  # Field name made lowercase.
 
     class Meta:
         managed = False

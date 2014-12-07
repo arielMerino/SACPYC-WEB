@@ -33,6 +33,9 @@ urlpatterns = patterns('',
     url(r'^Login/',Administracion().llamadaLogin),
     url(r'^ValidarUsr/',Administracion().validarLogin),
     url(r'^TipoEventoAddMenu/',Administracion().llamadaTipoEventoAddMenu),
+    url(r'^TipoEventoEdMenu/',Administracion().llamadaTipoEventoEdMenu),
+    url(r'^TipoEventoEdCheck/',Administracion().llamadaTipoEventoEdCheck),
+    url(r'^TipoEventoEMenu/',Administracion().llamadaTipoEventoEMenu),
 
     # url(r'^blog/', include('blog.urls')),
 ) 
