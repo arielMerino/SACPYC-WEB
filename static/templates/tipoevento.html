@@ -3,7 +3,7 @@
 			<h2>Eventos:</h2>	
 	   			<form id="tipoevento" method="POST">{%csrf_token%}
 					<div class="row" style='overflow:auto; height:220px'>
-			    		<table class="table table-condensed">
+			    		<table class="table table-striped">
 			    			<thead>
 								<tr>
 									<th>Tipo Evento</th>	
@@ -23,14 +23,17 @@
     				<br>
     				<input type="submit" id="EE" name="siguiente1" class="btn btn-default frente" value="Editar Evento" onclick='document.getElementById("tipoevento").action="/TipoEventoEditar/"'>
     				<input type="submit" name="siguiente2" class="btn btn-default frente" value="Agregar Evento" onclick='document.getElementById("tipoevento").action="/TipoEventoAgregar/"'>
+    				<input type="submit" id="DE" name="siguiente2" class="btn btn-default frente" value="Eliminar Evento" onclick='document.getElementById("tipoevento").action="/TipoEventoEliminar/"'>
 				</form>
 				{%if tipos_evento%}
 					<script type="text/javascript">
 						document.getElementById('EE').disabled=false;
+						document.getElementById('DE').disabled=false;
 					</script>
 				{%else%}
 					<script type="text/javascript">
 						document.getElementById('EE').disabled=true;
+						document.getElementById('DE').disabled=true;
 					</script>
 				{%endif%}
 

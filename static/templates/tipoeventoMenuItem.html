@@ -3,12 +3,12 @@
 {%endblock%}
 {%block body%}
 	<h2>Editar Menu:</h2>
-	<form id="EditMenu" method="POST" action="/TipoEventoEdCheck/">{%csrf_token%}
+	<form id="EditMenu" method="POST">{%csrf_token%}
 		<h3>Evento: {{ nombre_evento }}, Menú: {{ nombre_menu }} </h3>
 		<label for="submenu">Seleccione los Items que desee agregar el Menú</label>
 		<br><br>
 		
-		<table class="table table-condensed">
+		<table class="table table-striped">
 			<tr>
     			<td>Categoria</td>
     			<td></td>
@@ -31,8 +31,8 @@
     			{%endfor%}
     	{% endfor %}
     	</table>
-		<a href="javascript:history.back()" class='btn btn-default frente'>Volver</a>
-		<input type="submit" name="siguiente2" class='btn btn-default frente' value="Agregar">
+		<input type="submit" name="siguiente1" class='btn btn-default frente' value="Volver" onclick="document.getElementById('EditMenu').action='/TipoEventoEditar/'">
+		<input type="submit" name="siguiente2" class='btn btn-default frente' value="Agregar" onclick="document.getElementById('EditMenu').action='/TipoEventoEdCheck/'">
 		    
 	    </form>
 
