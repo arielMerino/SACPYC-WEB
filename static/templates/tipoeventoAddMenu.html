@@ -1,14 +1,11 @@
 {%extends "base2.html"%}
 {%block body%}
 	<div id="form-1" class="row">
-		<form id="agregarD" method="POST" action="/TipoEventoEdMenu/">{%csrf_token%}
-		    <div class="col-xs-6">
+		<form id="editarMenu" method="POST" action="/TipoEventoEdMenu/">{%csrf_token%}
 		    	<h3>Agregar Menú:</h3>
 		    	<h4>Evento: {{ evento.nombre_tipo_evento }} </h4>
-		    	<div class="col-xs-12">
 		    		<label for="submenu">Menu Asociado:</label>
 		    		<br>
-		    	</div>
 		    	<div class="col-xs-6">
 		    		<table class="table table-condensed">
 			    		{% for items in menus %}
@@ -21,20 +18,10 @@
 			    		{%endfor%}
 		    		</table>
 		    	</div>
-		    	
-		    	
-		    	<div class="col-xs-6">
+		    	<div class="col-xs-10">
+					<input type="submit" name="volver_home" class="btn btn-default frente" value="Listo" onclick="document.getElementById('editarMenu').action='/TipoEvento/'">
+					<input type="submit" name="siguiente2" class="btn btn-default frente" value="Editar">
 		    	</div>
-		    	<div class="col-xs-12">
-			    	<div class="col-xs-6" style="padding-left:0;">
-						<a href="javascript:history.back()" class="btn-lat btn btn-default frente">Volver</a>
-					</div>
-					<div class="col-xs-6" style="padding-right:0;">
-						<input type="submit" name="siguiente2" class="btn-lat btn btn-default frente" value="Editar">
-					</div>
-				</div>
-		    </div>
-		    
 	    </form>
     </div>
 

@@ -1,48 +1,35 @@
 {%extends "base2.html"%}
 {%block body%}
-	<div id="form-1" class="row">
-		<form id="agregarD" method="POST" action="/TipoEventoEMenu/">{%csrf_token%}
-		    <div class="col-xs-6">
-		    	<h3>Editar {{ nombre_evento }}</h3>
-		    	<div class="col-xs-12">
-		    		<label for="submenu">Menu Asociado:</label>
-		    		<br>
-		    	</div>
-		    	
-		    	<div class="col-xs-6">
-		    		<table class="table table-condensed">
-		    			{% if error != "" %}
-		    				<script type="text/javascript">
-		    					alert("{{error}}");
-		    					history.back();
-		    				</script>
-		    			
-		    			{% else %}
-		    				{% for items in menus %}
-				    			<tr>
-				    				<td> {{ items.nombre_tipo_menu }} </td>
-				    				<td>
-				    					<input type="radio" name="seleccion" value="{{ items.nombre_tipo_menu }}" checked><br>
-									</td>
-				    			</tr>
-				    		{%endfor%}
-		    			{%endif%}
-			    			
-		    		</table>
-		    		
-		    	</div>
-		    	<div class="col-xs-12">
-			    	<div class="col-xs-6" style="padding-left:0;">
-						<a href="javascript:history.back()" class="btn-lat btn btn-default frente">volver</a>
-					</div>
-					<div class="col-xs-6" style="padding-right:0;">
-						<input type="submit" name="siguiente2" class="btn-lat btn btn-default frente" value="Editar">
-					</div>
-				</div>
-		    </div>
+	<h3>Editar {{ nombre_evento }}</h3>
+		<form id="selMenu" method="POST">{%csrf_token%}
+			<div id="form-1" class="row">
+    			<label for="submenu">Menu Asociado:</label>
+    			<br>
+	    		<table class="table table-striped">
+	    			{% if error != "" %}
+	    				<script type="text/javascript">
+	    					alert("{{error}}");
+	    					history.back();
+	    				</script>
+	    			
+	    			{% else %}
+	    				{% for items in menus %}
+			    			<tr>
+			    				<td> {{ items.nombre_tipo_menu }} </td>
+			    				<td>
+			    					<input type="radio" name="seleccion" value="{{ items.nombre_tipo_menu }}" checked><br>
+								</td>
+			    			</tr>
+			    		{%endfor%}
+	    			{%endif%}
+	    		</table>
+    		</div>
+    		<br>
+			<input type="submit" name="volver" class="btn btn-default frente" value="Volver a Eventos" onclick='document.getElementById("selMenu").action="/TipoEvento/"'>
+			<input type="submit" name="editar" class="btn btn-default frente" value="Editar Menu" onclick='document.getElementById("selMenu").action="/TipoEventoEMenu/"'>
 		    
 	    </form>
-    </div>
+    
 
 {%endblock%}
 {%block js%}

@@ -288,6 +288,7 @@ class TipoEvento(models.Model):
     idtipoevento = models.IntegerField(db_column='IDTIPOEVENTO', primary_key=True)  # Field name made lowercase.
     nombre_tipo_evento = models.CharField(db_column='NOMBRE_TIPO_EVENTO', max_length=25, blank=True)  # Field name made lowercase.
     visible = models.IntegerField(db_column='VISIBLE', blank=True, null=True)  # Field name made lowercase.
+    desripcion_evento = models.CharField(db_column='DESRIPCION_EVENTO', max_length=1024)  # Field name made lowercase.
 
     class Meta:
         managed = False

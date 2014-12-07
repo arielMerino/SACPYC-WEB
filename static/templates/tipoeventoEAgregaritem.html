@@ -1,0 +1,46 @@
+{%extends "base2.html"%}
+{%block menuIzq%}
+{%endblock%}
+{%block body%}
+	<h2>Editar Menu:</h2>
+	<form id="EditMenu" method="POST" action="/TipoEventoEdCheck2/">{%csrf_token%}
+		<h3>Evento: {{ nombre_tipo_evento }}, Menú: {{ nombre_tipo_menu }} </h3>
+		<label for="submenu">Seleccione los Items que desee agregar el Menú</label>
+		<br><br>
+		
+		<table class="table table-condensed">
+			<tr>
+    			<td>Categoria</td>
+    			<td></td>
+    			<td>Selección</td>
+    		</tr>
+		{% for lista in lista_items %}
+			<tr>
+				<td>{{ lista.tipo }}</td>
+				<td>Item</td>
+				<td></td>
+			</tr>
+    			{% for it in lista.item %}
+    			<tr>
+    				<td></td>
+    				<td> {{ it.nombre_item }} </td>
+    				<td>
+    					<input type="checkbox" name="checks" value="{{ it.nombre_item }}">
+					</td>
+    			</tr>
+    			{%endfor%}
+    	{% endfor %}
+    	</table>
+		<a href="javascript:history.back()" class='btn btn-default frente'>Volver</a>
+		<input type="submit" name="siguiente2" class='btn btn-default frente' value="Agregar">
+		    
+	    </form>
+
+{%endblock%}
+{%block js%}
+	<script type="text/javascript" src="/static/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript">
+	document.getElementById('te').className="btn btn-default active";
+	
+	</script>
+{%endblock%}
