@@ -1,0 +1,34 @@
+{%extends "base2.html"%}
+{%block body%}
+	<div class="row">
+		<div class='col-xs-3'></div>
+		
+		<div class="col-xs-6">
+			<h2>Crear Utensilio:</h2>
+			<form method='POST' action='/ValidarCrearUtensilio/'/>{%csrf_token%}
+				<label for='nompreT'>Nombre Utensilio*:</label>
+				<input type='text' name='nombreU' class='form-control' required/>
+				<label for='stockU'>Stock Actual Utensilio*:</label>
+				<input type='text' name='stockU' pattern='\d+' class='form-control' required/>
+				<label for='stockM'>Stock Minimo Utensilio*:</label>
+				<input type='text' name='stockM' pattern='\d+' class='form-control' required/>
+				<label for='tipoU'>Tipo Utensilio*:</label>
+				<select name='tipoU' class='form-control'>
+					{%for tipo in tiposUtensilo%}
+						<option value='{{tipo.idT}}'>{{tipo.nombreT}}</option>
+					{%endfor%}
+				</select>
+				<br>
+				<input type='submit' class='btn btn-default' value='aceptar' />
+			</form>
+		</div>
+	</div>
+
+
+{%endblock%}
+{%block js%}
+	<script type="text/javascript" src="/static/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript">
+	document.getElementById('cocc').className="btn btn-default active";
+	</script>
+{%endblock%}

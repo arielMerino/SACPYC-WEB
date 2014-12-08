@@ -72,8 +72,8 @@ DATABASES = {
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'ariel.merino@usach.cl'
-EMAIL_HOST_PASSWORD = 'qwerty123'
+EMAIL_HOST_USER = 'sacpyc.catering@gmail.com'
+EMAIL_HOST_PASSWORD = 'contigopanycebolla'
 EMAIL_USE_TLS = True
 
 LANGUAGE_CODE = 'en-us'

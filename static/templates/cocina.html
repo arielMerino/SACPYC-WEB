@@ -2,7 +2,7 @@
 {%block body%}
 			<h2>Cocina:</h2>
 				<form id="form-1" method="POST">{%csrf_token%}
-					<input type="submit" id="EE" name="siguiente1" class="btn btn-default frente" value="Administrar Ingredientes" onclick='document.getElementById("form-1").action="/CocinaIngredientes/"'>
+					<input type="submit"  name="siguiente1" class="btn btn-default frente" value="Administrar Ingredientes" onclick='document.getElementById("form-1").action="/CocinaIngredientes/"'>
     				<input type="submit" name="siguiente2" class="btn btn-default frente" value="Administrar Utensilios" onclick='document.getElementById("form-1").action="/CocinaUtensilios/"'>
 				</form>
 

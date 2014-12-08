@@ -1,1 +1,100 @@
-utensilios.html
+{%extends "base2.html"%}
+{%block body%}
+	<h2>Administración de Utensilios:</h2>
+	<form id='form1' method='POST'>{%csrf_token%}
+		<br>
+		<h3>Tipos de Utensilios:</h3>
+		<div class='row' style='overflow:auto; height:180px'>
+			<table class='table table-striped'>
+				<thead>
+					<tr>
+						<th>Tipo Utensilio</th>
+						<th>Cantidad de Utensilios</th>	
+						<th>Selección</th>
+					</tr>
+				</thead>
+				<tbody>
+					{%for tipo in tiposUtensilo%}
+						<tr>
+							<td>{{tipo.nombreT}}</td>
+							<td>{{tipo.cantidadT}}</td>
+							<td>
+								<input type='radio' value='{{tipo.idT}}' name='tipoU' checked/>
+							</td>
+						</tr>
+					{%endfor%}
+				</tbody>
+			</table>
+		</div>
+		<br>
+		<input type='submit' class='btn btn-default' value='Crear Tipo Utensilio' onclick='document.getElementById("form1").action="/CrearTipoUtensilio/"'/>
+		<input id='TU1' type='submit' class='btn btn-default' value='Editar Tipo Utensilio' onclick='document.getElementById("form1").action="/EditarTipoUtensilio/"'/>
+		<input id='TU2' type='submit' class='btn btn-default' value='Eliminar Tipo Utensilio' onclick='document.getElementById("form1").action="/EliminarTipoUtensilio/"'/>
+	</form>
+	
+	<form id='form2' method='POST'>{%csrf_token%}
+		<br>
+		<h3>Utensilios:</h3>
+		<div class='row' style='overflow:auto; height:180px'>		
+			<table class='table table-striped'>
+				<thead>
+					<tr>
+						<th>Utensilios</th>
+						<th>Tipo de Utensilio</th>
+						<th>Stock Actual</th>
+						<th>Stock Minimo</th>
+						<th>Selección</th>
+					</tr>
+				</thead>
+				<tbody>
+					{%for item in utensilios%}
+						<tr>
+							<td>{{item.nombreU}}</td>
+							<td>{{item.idT}}</td>
+							<td>{{item.stockU}}</td>
+							<td>{{item.stockM}}</td>
+							<td>
+								<input type='radio' value='{{item.idU}}' name='utensilio' checked/>
+							</td>
+						</tr>
+					{%endfor%}
+				</tbody>
+			</table>
+		</div>
+		<br>
+		<input type='submit' class='btn btn-default' value='Crear Utensilio' onclick='document.getElementById("form2").action="/CrearUtensilio/"'/>
+		<input type='submit' id='U1' class='btn btn-default' value='Editar Utensilio' onclick='document.getElementById("form2").action="/EditarUtensilio/"'/>
+		<input type='submit' id='U2' class='btn btn-default' value='Eliminar Utensilio' onclick='document.getElementById("form2").action="/EliminarUtensilio/"'/>
+	</form>
+	
+	{%if tiposUtensilios%}
+		<script type="text/javascript">
+			document.getElementById('TU1').disabled=true;
+			document.getElementById('TU2').disabled=true;
+		</script>
+	{%else%}
+		<script type="text/javascript">
+			document.getElementById('TU1').disabled=false;
+			document.getElementById('TU2').disabled=false;
+		</script>
+	{%endif%}
+
+	{%if utensilios%}
+		<script type="text/javascript">
+			document.getElementById('U1').disabled=false;
+			document.getElementById('U2').disabled=false;
+		</script>
+	{%else%}
+		<script type="text/javascript">
+			document.getElementById('U1').disabled=true;
+			document.getElementById('U2').disabled=true;
+		</script>
+	{%endif%}
+	
+{%endblock%}
+{%block js%}
+	<script type="text/javascript" src="/static/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript">
+	document.getElementById('cocc').className="btn btn-default active";
+	</script>
+{%endblock%}
