@@ -80,6 +80,7 @@ urlpatterns = patterns('',
     url(r'^EditarUtensilio/',Administracion().editarUtensilio),
     url(r'^ValidarEditarUtensilio/',Administracion().validarEditarUtensilio),
     url(r'^EliminarUtensilio/',Administracion().eliminarUtensilio),
+    url(r'^TipoEventoSave/',Administracion().llamadaTipoEventoSave),
     # url(r'^blog/', include('blog.urls')),
 ) 
 

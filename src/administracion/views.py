@@ -1335,6 +1335,36 @@ class Administracion(TemplateView):
 		nombre = self.context["nombre_evento"]
 		evento = TipoEvento.objects.get(nombre_tipo_evento=nombre)
 		menu = TipoMenu.objects.filter(idtipoevento = evento.idtipoevento)
+		self.context["visible"] = evento.visible
+		opcion = self.context["visible"]
+		if menu.count() == 0:
+			self.context["error"] = "Aun no existen menus asociados"
+			return render(request,'tipoeventoEditar.html',self.context)
+		request.session["nombre_tipo_evento"] = evento.nombre_tipo_evento
+		self.context["menus"] = menu
+		return render(request,'tipoeventoEditar.html',self.context)
+
+	def llamadaTipoEventoSave(self,request):
+		self.context["error"] = ""
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context["error"]='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
+
+		self.context["nombre_evento"] = request.session["nombre_tipo_evento"]
+		request.session["nombre_tipo_evento"] = None
+		self.context["seleccion"] = request.POST.get("visibilidad")
+
+		nombre = self.context["nombre_evento"]
+		evento = TipoEvento.objects.get(nombre_tipo_evento=nombre)
+		menu = TipoMenu.objects.filter(idtipoevento = evento.idtipoevento)
+
+		evento.visible = self.context["seleccion"]
+		evento.save()
+
+		evento = TipoEvento.objects.get(nombre_tipo_evento=nombre)
+		self.context["visible"] = evento.visible
 		if menu.count() == 0:
 			self.context["error"] = "Aun no existen menus asociados"
 			return render(request,'tipoeventoEditar.html',self.context)

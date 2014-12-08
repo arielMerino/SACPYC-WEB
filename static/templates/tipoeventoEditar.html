@@ -13,12 +13,27 @@
 	    				</script>
 	    			
 	    			{% else %}
+		    			{%if visible == 1%}
+		    				<tr>
+		    					<td><label for="visibilidad">Visible para solicitud: </label></td>
+		    					<td><p>Si  <input type="radio" name="visibilidad" value="1" checked></p></td>
+		    					<td><p>No  <input type="radio" name="visibilidad" value="0" ></p></td>
+		    				</tr>
+		    			{%else%}
+		    				<tr>
+		    					<td><label for="visibilidad">Visible para solicitud: </label></td>
+		    					<td><p>Si  <input type="radio" name="visibilidad" value="1" ></p></td>
+		    					<td><p>No  <input type="radio" name="visibilidad" value="0" checked></p></td>
+		    				</tr>
+		    			{%endif%}
+	    				
 	    				{% for items in menus %}
 			    			<tr>
 			    				<td> {{ items.nombre_tipo_menu }} </td>
 			    				<td>
 			    					<input type="radio" name="seleccion" value="{{ items.nombre_tipo_menu }}" checked><br>
 								</td>
+								<td></td>
 			    			</tr>
 			    		{%endfor%}
 	    			{%endif%}
@@ -27,6 +42,7 @@
     		<br>
 			<input type="submit" name="volver" class="btn btn-default frente" value="Volver a Eventos" onclick='document.getElementById("selMenu").action="/TipoEvento/"'>
 			<input type="submit" name="editar" class="btn btn-default frente" value="Editar Menu" onclick='document.getElementById("selMenu").action="/TipoEventoEMenu/"'>
+			<input type="submit" name="save" class="btn btn-default frente" value="Guardar Selección" onclick='document.getElementById("selMenu").action="/TipoEventoSave/"'>
 		    
 	    </form>
     
