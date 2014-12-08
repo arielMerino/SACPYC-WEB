@@ -13,7 +13,7 @@
 {%endblock%}
 {%block body%}
     <div id="form-2" class="row">
-    	<form method="POST" action="/CotizarCat/">{%csrf_token%}
+    	<form method="POST" action="/Reload/">{%csrf_token%}
     		<div class="row">
 	    		<div class="col-xs-3"></div>
 	    		<div class="col-xs-6">
@@ -27,7 +27,7 @@
 			    	<label for="duracion">Duración Estimada*: (horas)</label>
 		    		<input title="debe ingresar la duración estimada en horas" min="1" max="12" type="number" value="3" name="duracion" class="form-control" required/>
 					<label for="invitados" >Cantidad de Invitados*:</label>
-					<input title="debe ingresar la cantidad de invitados" name="invitados" type="number" min="1" max="500" class="form-control" value="100" onclick="">
+					<input title="debe ingresar la cantidad de invitados" name="invitados" type="number" min="1" max="500" class="form-control" value="100">
 				</div>
 				<div class="col-xs-3"></div>
 			</div>

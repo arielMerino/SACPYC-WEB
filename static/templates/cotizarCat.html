@@ -1,28 +1,81 @@
 {%extends "base.html"%}
 {%block body%}	
 	<h2>Selección del Menú:</h2>
-	<form id='tipo-evento'>
+	<form id='tipo-evento' method='POST' action='/CotizarCat/'>{%csrf_token%}
 		<label for='tipoEvento'>Seleccionar Tipo de Evento*:</label>
 		<select title='Debe seleccionar un tipo de vento' name='tipoEvento' class='form-control' required>
-			<option value></option>
+			{%if nombretipoevento%}
+				<option value='{{tipoevento}}'>{{nombretipoevento}}</option>
+			{%endif%}
+			{%for evento in eventos%}
+				{%if evento.nombretipoevento != nombretipoevento%}
+					<option value='{{evento.idtipoevento}}'>{{evento.nombretipoevento}}</option>
+				{%endif%}
+			{%endfor%}
 		</select>
 		<br>
 		<input type='submit' class='btn btn-default' value='Seleccionar'>
 	</form>
 	<br><br>
 	<label>Descripción del Evento: </label>
-	<p id='descripcionEvento' class='panel panel-default' style='height:200px;overflow:auto;'></p>
+	<p id='descripcionEvento' class='panel panel-default' style='height:100px;overflow:auto;'>{{descripcion}}</p>
 
-	<form id='tipo-menu'>
+	<form id='tipo-menu' method='POST' action='/CotizarCat/'>{%csrf_token%}
 		<label for='tipoMenu'>Seleccionar Tipo de Menú*:</label>
 		<select title='Debe seleccionar un tipo de menú' name='tipoMenu' class='form-control' required>
-			<option></option>
+			{%if nombretipomenu%}
+				<option value='{{tipoMenu}}'>{{nombretipomenu}}</option>
+			{%endif%}
+			{%for menu in menus%}
+				{%if menu.nombretipomenu != nombretipomenu%}
+					<option value='{{menu.idtipomenu}}'>{{menu.nombretipomenu}}</option>
+				{%endif%}
+			{%endfor%}
 		</select>
 		<br>
 		<input type='submit' class='btn btn-default' value='Seleccionar'>
 	</form>
 	<br><br>
-    <div class="col-xs-3" style="padding-left:0;">
-		<a href="javascript:history.back()" class="btn-lat btn btn-default frente">volver</a>
-	</div>
+	<form id='carta' method='POST' action='/CotizarResumen/'>{%csrf_token%}
+		<label for='seleccion'>Seleccione sus platos y bebidas:</label>
+		<div style='overflow:auto; height:450px' class='panel panel-default'>
+			<table class='table table-striped'>
+				<thead>
+					<tr>
+						<th>Categoría</th>
+						<th>Ítem:</th>
+						<th>Selección:</th>
+					</tr>
+				</thead>
+				{%for tipo in tipos%}
+					<tbody>
+						<tr>
+							<th>{{tipo}}</th>
+							<th></th>
+							<th></th>
+						</tr>
+						{%for entrada in cruzaItems%}
+							{%if entrada.nombretipoitem == tipo%}
+							<tr>
+								<td></td>
+								<td>{{entrada.nombreitem}}</td>
+								<td>
+									<input	type='checkbox' name='items' value='{{entrada.iditem}}'>
+								</td>
+							</tr>
+							{%endif%}
+						{%endfor%}
+					</tbody>
+				{%endfor%}
+			</table>
+		</div>
+		<div class='row'>
+			<div class='col-xs-3'><a href="javascript:history.back()" class="btn-lat btn btn-default frente">volver</a></div>
+			<div class='col-xs-6'></div>
+			<div class='col-xs-3'><input type='submit' class='btn btn-default frente btn-lat' value='Siguiente'></div>
+		</div>
+		
+	</form>
+{%endblock%}
+{%block js%}
 {%endblock%}
