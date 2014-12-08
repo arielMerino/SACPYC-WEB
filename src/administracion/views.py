@@ -164,7 +164,25 @@ class Administracion(TemplateView):
 
 		return render(request,'garzones.html',self.context)
 
+	def adminIngredientes(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 
+		ingredientes = Ingrediente.objects.all()
+		listaIngredientes = []
+
+		for tipo in ingredientes:
+			dicc = {}
+			dicc["idI"] = tipo.idingrediente
+			dicc["nombreIng"] = tipo.nombre_ingrediente
+			dicc["stockAct"] = tipo.stock_ingrediente
+			dicc["stockMin"] = tipo.stock_minimo_ingrediente
+			listaIngredientes.append(dicc)
+		self.context["lista_ingredientes"] = listaIngredientes
+		return render(request,'ingredientes.html',self.context)
 
 	def llamadaItem(self,request):
 		self.context['nombre']=request.session['nombre']
@@ -203,6 +221,78 @@ class Administracion(TemplateView):
 		self.context['items'] = listaItems
 
 		return render(request,'item.html',self.context)
+
+	def crearIngrediente(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
+
+		ingredientes = Ingrediente.objects.all()
+		listaIngredientes = []
+
+		for tipo in ingredientes:
+			dicc = {}
+			dicc["idI"] = tipo.idingrediente
+			dicc["nombreIng"] = tipo.nombre_ingrediente
+			dicc["stockAct"] = tipo.stock_ingrediente
+			dicc["stockMin"] = tipo.stock_minimo_ingrediente
+			listaIngredientes.append(dicc)
+		self.context["lista_ingredientes"] = listaIngredientes
+		return render(request,'ingredientesAd.html',self.context)
+
+	def validarCrearIngrediente(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
+		nombreIng = request.POST.get('nombreIng')
+		stockMin = request.POST.get('stockMin')
+		stockAct = request.POST.get('stockAct')
+		ingrediente = Ingrediente(nombre_ingrediente=nombreIng, stock_ingrediente=stockAct, stock_minimo_ingrediente= stockMin)
+		ingrediente.save()
+
+		ingredientes = Ingrediente.objects.all()
+		listaIngredientes = []
+
+		for tipo in ingredientes:
+			dicc = {}
+			dicc["idI"] = tipo.idingrediente
+			dicc["nombreIng"] = tipo.nombre_ingrediente
+			dicc["stockAct"] = tipo.stock_ingrediente
+			dicc["stockMin"] = tipo.stock_minimo_ingrediente
+			listaIngredientes.append(dicc)
+		self.context["lista_ingredientes"] = listaIngredientes
+		return render(request,'ingredientes.html',self.context)
+
+	def editarIngrediente(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
+
+		idI = request.POST.get('ingr')
+		ingrediente = Ingrediente.objects.get(idingrediente=idI)
+		self.context['idingr'] = idI
+		self.context['nombre_ingrediente'] = ingrediente.nombre_ingrediente
+		self.context['stockMin'] = ingrediente.stockMin
+		self.context['stockAct'] = ingrediente.stockAct
+
+		ingredientes = Ingrediente.objects.all()
+		listaIngredientes = []
+
+		for tipo in ingredientes:
+			dicc = {}
+			dicc["idI"] = tipo.idingrediente
+			dicc["nombreIng"] = tipo.nombre_ingrediente
+			dicc["stockAct"] = tipo.stock_ingrediente
+			dicc["stockMin"] = tipo.stock_minimo_ingrediente
+			listaIngredientes.append(dicc)
+		self.context["lista_ingredientes"] = listaIngredientes
+		return render(request,'ingredientesE.html',self.context)
 
 	def crearItem(self,request):
 		items = Item.objects.all()
@@ -910,8 +1000,11 @@ class Administracion(TemplateView):
 			return render(request,'login.html',self.context)
 
 		self.context["nombre_e"] = request.POST.get("nombre_evento")
+		self.context["descripcion"] = request.POST.get("comment")
+
 		nombre = self.context["nombre_e"]
-		evento = TipoEvento(nombre_tipo_evento=nombre)
+		descripcion = self.context["descripcion"]
+		evento = TipoEvento(nombre_tipo_evento=nombre, visible=0,desripcion_evento=descripcion)
 		evento.save()
 		evento = TipoEvento.objects.get(nombre_tipo_evento=nombre)
 		menu1 = TipoMenu(nombre_tipo_menu="Básico",idtipoevento=evento)
@@ -922,8 +1015,15 @@ class Administracion(TemplateView):
 		menu3.save()
 		self.context["evento"] = evento
 		request.session["nombre_tipo_evento"] = evento.nombre_tipo_evento
+		return render(request,'tipoeventoredirect2.html',self.context)
+
+	def llamadaTipoEventoConfMenu(self,request):
+		self.context["nombre_tipo_evento"] = request.session["nombre_tipo_evento"]
+		nombre = self.context["nombre_tipo_evento"]
+		evento = TipoEvento.objects.get(nombre_tipo_evento=nombre)
 		menu = TipoMenu.objects.filter(idtipoevento = evento.idtipoevento)
 		self.context["menus"] = menu
+		self.context["evento"] = evento
 		return render(request,'tipoeventoAddMenu.html',self.context)
 
 	def llamadaTipoEventoEdMenu(self,request):
@@ -1129,6 +1229,26 @@ class Administracion(TemplateView):
 		self.context["menus"] = menu
 		return render(request,'tipoeventoEditar.html',self.context)
 
+	def llamadaTipoEventoEliminar(self,request):
+		self.context["error"] = ""
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context["error"]='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
+
+		self.context["nombre_evento"] = request.POST.get("seleccion")
+		nombre = self.context["nombre_evento"]
+		evento = TipoEvento.objects.get(nombre_tipo_evento=nombre)
+		evento.delete()
+		lista_evento=[]
+		tabla = TipoEvento.objects.all()
+		cantidad = tabla.count()
+		for item in range(cantidad):
+			lista_evento.append(tabla[item].nombre_tipo_evento)
+		self.context["tipos_evento"] = lista_evento
+		return render(request,'tipoeventoredirect.html',self.context)
+
 	def llamadaLogin(self,request):
 		request.session['nombre']=None
 		request.session['apellido']=None
@@ -1154,3 +1274,17 @@ class Administracion(TemplateView):
 			self.context['error']='Usuario o contraseña incorrecta*'
 			print 'no'
 		return render(request,'login.html',self.context)
+
+	def llamadaCocina(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
+		return render(request,'cocina.html',self.context)
+
+	def adminUtensilios(self,request):
+		return render(request,'cocina.html',self.context)
+
+
+

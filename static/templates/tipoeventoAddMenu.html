@@ -1,7 +1,7 @@
 {%extends "base2.html"%}
 {%block body%}
 	<div id="form-1" class="row">
-		<form id="editarMenu" method="POST" action="/TipoEventoEdMenu/">{%csrf_token%}
+		<form id="editarMenu" method="POST">{%csrf_token%}
 		    	<h3>Agregar Menú:</h3>
 		    	<h4>Evento: {{ evento.nombre_tipo_evento }} </h4>
 		    		<label for="submenu">Menu Asociado:</label>
@@ -20,7 +20,7 @@
 		    	</div>
 		    	<div class="col-xs-10">
 					<input type="submit" name="volver_home" class="btn btn-default frente" value="Listo" onclick="document.getElementById('editarMenu').action='/TipoEvento/'">
-					<input type="submit" name="siguiente2" class="btn btn-default frente" value="Editar">
+					<input type="submit" name="siguiente2" class="btn btn-default frente" value="Editar" onclick="document.getElementById('editarMenu').action='/TipoEventoEdMenu/'">
 		    	</div>
 	    </form>
     </div>

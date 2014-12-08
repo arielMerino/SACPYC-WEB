@@ -1,12 +1,12 @@
 {%extends "base2.html"%}
 {%block body%}
 	<div id="form-1" class="row">
-		<form id="tievEM" method="POST" action="/TipoEventoEMenu/">{%csrf_token%}
+		<form id="tievEM" method="POST">{%csrf_token%}
 		    	<h3>Editar {{ nombre_evento }}</h3>
 		    	<label for="submenu">Menu {{nombre_tipo_menu}}:</label>
 		    	<br>
 		    	<div class="col-xs-8">
-		   		<table class="table table-condensed">
+		   		<table class="table table-striped">
     				{% for items in lista_item %}
 		    			<tr>
 		    				<td> {{ items.nombre_item }} </td>
@@ -19,7 +19,6 @@
 	    		</div>
 	    		<div class="col-xs-10">
 	    			<input type="submit" name="volver_home" class="btn btn-default frente" value="Volver a Eventos" onclick="document.getElementById('tievEM').action='/TipoEvento/'">
-	    			<a href="javascript:history.back()" class="btn btn-default frente">Volver a Menus</a>
 					<input type="submit" name="agregar_item" class="btn btn-default frente" value="Agregar Item" onclick="document.getElementById('tievEM').action='/AgregarItemMenu/'">
 					<input type="submit" name="eliminar_item" class="btn btn-default frente" value="Elminiar Item" onclick="document.getElementById('tievEM').action='/ElminarItemMenu/'">
 	    		</div>

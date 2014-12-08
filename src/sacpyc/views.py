@@ -174,7 +174,4 @@ class Home(TemplateView):
 		return render(request,'mail.html',self.context)
 
 	def llamadaContacto(self,request):
-		print self.context['nombre']
-		print self.context['email']
-		print self.context['comment']
 		return render(request,'contacto.html',self.context)		
