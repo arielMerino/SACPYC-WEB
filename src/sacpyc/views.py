@@ -17,7 +17,20 @@ class Home(TemplateView):
 		return render(request,'home.html',self.context)
 
 	def llamadaCotizar(self,request):
-
+		request.session['nombre'] = None
+		request.session['apellido']= None
+		request.session['phone']= None
+		request.session['email']= None
+		request.session['direccion']= None
+		request.session['fecha']= None
+		request.session['duracion']= None
+		request.session['invitados']= None
+		request.session['idTipoEvento']= None
+		request.session['nombreTipoEven']= None
+		request.session['idTipoMenu']= None
+		request.session['nombreTipoMe']= None
+		request.session['items']= None
+		request.session['nombresItems']= None
 		return render(request,'cotizar.html',self.context)
 
 	def llamadaCotizarEv(self,request):
@@ -122,6 +135,9 @@ class Home(TemplateView):
 
 
 	def cotizarResumen(self,request):
+		if (not request.session['idTipoMenu']) or (not request.session['nombreTipoEvento']):
+			self.context['error'] = 'ERROR - Debe seleccionarse un tipo de Evento un tipo de menú y a lo menos un ítem*'
+			return render(request,'reload4.html',self.context)
 		items = request.POST.getlist('items')
 		request.session['items'] = items
 		arreglo = []
