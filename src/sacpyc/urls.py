@@ -81,6 +81,8 @@ urlpatterns = patterns('',
     url(r'^ValidarEditarUtensilio/',Administracion().validarEditarUtensilio),
     url(r'^EliminarUtensilio/',Administracion().eliminarUtensilio),
     url(r'^TipoEventoSave/',Administracion().llamadaTipoEventoSave),
+    url(r'^RedirectTipoEventoEditar/',Administracion().redirectTipoEventoEditar),
+    url(r'^RedirectTipoEventoEMenu/',Administracion().redirectTipoEventoEMenu),
     # url(r'^blog/', include('blog.urls')),
 ) 
 

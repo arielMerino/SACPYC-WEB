@@ -45,6 +45,7 @@ class Home(TemplateView):
 		request.session['duracion'] = duracion
 		request.session['invitados'] = invitados
 		request.session['fecha'] = fecha
+		request.session['hora'] = hora
 		return render(request,'reload.html',self.context)
 
 	def llamadaCotizarCat(self,request):
