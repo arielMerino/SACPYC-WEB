@@ -5,6 +5,7 @@
 		
 		<div class="col-xs-6">
 			<h2>Editar Garzón:</h2>
+			<label style='color:red'>{{error}}</label>
 			<form method='POST' action='/ValidarGarzon/'>{%csrf_token%}
 				<input type='hidden' name='correo_garzon_a' value='{{correoG}}'>
 				<label for='correo_garzon'>Correo*:</label>

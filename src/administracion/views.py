@@ -72,10 +72,18 @@ class Administracion(TemplateView):
 		if self.context['nombre']==None:
 			self.context['error']='Debes iniciar sesión*'
 			return render(request,'login.html',self.context)
+
 		correo = request.POST.get('correo_garzon')
 		nombre = request.POST.get('nombre_garzon')
 		apellido = request.POST.get('apellido_garzon')
 		telefono = request.POST.get('telefono_garzon')
+
+		g = Garzon.objects.filter(mail_garzon=correo)
+
+		if g.count() > 0:
+			self.context['error'] = 'ERROR - ya existe un garzón asociado al correo*'
+			return render(request,'garzonesCrear.html',self.context)
+
 		garzon = Garzon(mail_garzon=correo, nombre_garzon=nombre, apellido_garzon=apellido,telefono_garzon=telefono)
 		garzon.save()
 
@@ -90,7 +98,7 @@ class Administracion(TemplateView):
 			listaGarzones.append(dicc)
 		self.context['garzones']=listaGarzones
 
-		return render(request,'garzones.html',self.context)
+		return render(request,'reload3.html',self.context)
 
 	def eliminarGarzon(self,request):
 		self.context['nombre']=request.session['nombre']
@@ -115,7 +123,7 @@ class Administracion(TemplateView):
 			listaGarzones.append(dicc)
 		self.context['garzones']=listaGarzones
 
-		return render(request,'garzones.html',self.context)
+		return render(request,'reload3.html',self.context)
 
 	def editarGarzon(self,request):
 		self.context['nombre']=request.session['nombre']
@@ -144,6 +152,16 @@ class Administracion(TemplateView):
 		apellido = request.POST.get('apellido_garzon')
 		telefono = request.POST.get('telefono_garzon')
 
+		g = Garzon.objects.filter(mail_garzon=correo)
+
+		if g.count() > 0 and correoAntiguo != correo:
+			self.context['error'] = 'ERROR - ya existe un garzón asociado al correo*'
+			self.context['correoG']=correoAntiguo
+			self.context['nombreG']=nombre
+			self.context['apellidoG']=apellido
+			self.context['telefonoG']=telefono
+			return render(request,'garzonesEd.html',self.context)
+
 		garzon = Garzon.objects.get(mail_garzon=correoAntiguo)
 		garzon.nombre_garzon=nombre
 		garzon.apellido_garzon=apellido
@@ -162,7 +180,7 @@ class Administracion(TemplateView):
 			listaGarzones.append(dicc)
 		self.context['garzones']=listaGarzones
 
-		return render(request,'garzones.html',self.context)
+		return render(request,'reload3.html',self.context)
 
 	def adminIngredientes(self,request):
 		self.context['nombre']=request.session['nombre']
@@ -487,7 +505,7 @@ class Administracion(TemplateView):
 				self.context['tiposItem'] = listaTipos
 				self.context['items'] = listaItems
 
-				return render(request,'item.html',self.context)
+				return render(request,'reload1.html',self.context)
 
 		if listaItems.count() > 0:
 
@@ -566,7 +584,7 @@ class Administracion(TemplateView):
 		self.context['tiposItem'] = listaTipos
 		self.context['items'] = listaItems
 
-		return render(request,'item.html',self.context)
+		return render(request,'reload1.html',self.context)
 
 	def editarItem(self,request):
 		idI = request.POST.get('item')
@@ -646,7 +664,7 @@ class Administracion(TemplateView):
 		self.context['tiposItem'] = listaTipos
 		self.context['items'] = listaItems
 
-		return render(request,'item.html',self.context)
+		return render(request,'reload1.html',self.context)
 
 
 	def validarCrearItem(self,request):
@@ -685,7 +703,7 @@ class Administracion(TemplateView):
 		self.context['tiposItem'] = listaTipos
 		self.context['items'] = listaItems
 
-		return render(request,'item.html',self.context)
+		return render(request,'reload1.html',self.context)
 
 	def crearTipoItem(self,request):
 		return render(request,'tipoItemAd.html',self.context)
@@ -804,7 +822,7 @@ class Administracion(TemplateView):
 		self.context['tiposItem'] = listaTipos
 		self.context['items'] = listaItems
 
-		return render(request,'item.html',self.context)
+		return render(request,'reload1.html',self.context)
 
 	def validarEditarTipoItem(self,request):
 		idT = request.session['idT']
@@ -859,7 +877,7 @@ class Administracion(TemplateView):
 		self.context['tiposItem'] = listaTipos
 		self.context['items'] = listaItems
 
-		return render(request,'item.html',self.context)
+		return render(request,'reload1.html',self.context)
 
 	def llamadaNotificaciones(self,request):
 		self.context['nombre']=request.session['nombre']
@@ -944,6 +962,7 @@ class Administracion(TemplateView):
 			return render(request,'login.html',self.context)
 
 		datosProv = request.POST.get('proveedor')
+		print datosProv
 		tipo = datosProv.split(';')[0]
 		ID = datosProv.split(';')[1]
 		self.context['tipoP']=tipo
@@ -977,7 +996,7 @@ class Administracion(TemplateView):
 			proveedores.append(proveedor)
 
 		self.context['proveedores']=proveedores
-		return render(request,'proveedores.html',self.context)
+		return render(request,'reload2.html',self.context)
 
 	def validarProveedoresUp(self,request):
 		self.context['nombre']=request.session['nombre']
@@ -1030,7 +1049,7 @@ class Administracion(TemplateView):
 			proveedores.append(proveedor)
 
 		self.context['proveedores']=proveedores
-		return render(request,'proveedores.html',self.context)
+		return render(request,'reload2.html',self.context)
 
 	def validarProveedoresAd(self,request):
 		self.context['nombre']=request.session['nombre']
@@ -1074,7 +1093,7 @@ class Administracion(TemplateView):
 
 		self.context['proveedores']=proveedores
 
-		return render(request,'proveedores.html',self.context)
+		return render(request,'reload2.html',self.context)
 
 	def llamadaTipoEvento(self,request):
 		self.context['nombre']=request.session['nombre']

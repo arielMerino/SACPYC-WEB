@@ -55,6 +55,8 @@ class Home(TemplateView):
 			self.context['descripcion'] = tE.desripcion_evento
 			self.context['tipoEvento'] = request.POST.get('tipoEvento')
 			self.context['nombretipoevento'] = tE.nombre_tipo_evento
+			request.session['idTipoEvento'] = idTE
+			request.session['nombreTipoEvento'] = tE.nombre_tipo_evento
 
 			a = TipoMenu.objects.filter(idtipoevento=tE)
 			cruza = []
@@ -78,6 +80,8 @@ class Home(TemplateView):
 			self.context['tipoMenu'] = idTM
 			self.context['nombretipomenu'] = TipoMenu.objects.get(idtipomenu=idTM).nombre_tipo_menu
 			itemsMenu = ItemMenu.objects.filter(idtipomenu=idTM)
+			request.session['idTipoMenu'] = idTM
+			request.session['nombreTipoMenu'] = self.context['nombretipomenu']
 			items=[]
 			for entrada in itemsMenu:
 				idItem = entrada.iditem.iditem
@@ -117,7 +121,6 @@ class Home(TemplateView):
 
 
 	def cotizarResumen(self,request):
-		print request.session['evento']
 		items = request.POST.getlist('items')
 		request.session['items'] = items
 		arreglo = []
@@ -133,7 +136,6 @@ class Home(TemplateView):
 		self.context['email'] = request.session['email']
 		self.context['direccion'] = request.session['direccion']
 		self.context['fecha'] = request.session['fecha']
-		self.context['hora'] = request.session['hora']
 		self.context['duracion'] = request.session['duracion']
 		self.context['invitados'] = request.session['invitados']
 		self.context['idevento'] = request.session['idTipoEvento']
@@ -204,7 +206,7 @@ class Home(TemplateView):
 			c = Cliente.objects.filter(mail_cliente=request.session['email'])
 
 
-		sol = SolicitudDeCotizacion(estado_solicitud='generada',mail_cliente = c[0],idtipoevento = TipoEvento.objects.get(idtipoevento=request.session['idTipoEvento']),cantidad_asistentes = request.session['invitados'],fecha_tentativa = request.session['fecha'],duracion_tentativa = request.session['duracion'],nombre_evento = request.session['nombreTipoEvento'],direccion_evento = request.session['direccion'])
+		sol = SolicitudDeCotizacion(estado_solicitud='pendiente',mail_cliente = c[0],idtipoevento = TipoEvento.objects.get(idtipoevento=request.session['idTipoEvento']),cantidad_asistentes = request.session['invitados'],fecha_tentativa = request.session['fecha'],duracion_tentativa = request.session['duracion'],nombre_evento = request.session['nombreTipoEvento'],direccion_evento = request.session['direccion'])
 		sol.save()
 
 
