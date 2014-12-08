@@ -132,6 +132,17 @@ class Cotizacion(models.Model):
         db_table = 'cotizacion'
 
 
+class DjangoMigrations(models.Model):
+    id = models.IntegerField(primary_key=True)  # AutoField?
+    app = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    applied = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'django_migrations'
+
+
 class Garzon(models.Model):
     mail_garzon = models.CharField(db_column='MAIL_GARZON', max_length=45, blank=True)  # Field name made lowercase.
     telefono_garzon = models.IntegerField(db_column='TELEFONO_GARZON', blank=True, null=True)  # Field name made lowercase.
@@ -276,7 +287,7 @@ class SolicitudDeCotizacion(models.Model):
     duracion_tentativa = models.IntegerField(db_column='DURACION_TENTATIVA', blank=True, null=True)  # Field name made lowercase.
     comentarios_field = models.CharField(db_column='COMENTARIOS_', max_length=250, blank=True)  # Field name made lowercase. Field renamed because it ended with '_'.
     nombre_evento = models.CharField(db_column='NOMBRE_EVENTO', max_length=25, blank=True)  # Field name made lowercase.
-    direccion_evento = models.CharField(db_column='DIRECCION_EVENTO', max_length=45, blank=True)  # Field name made lowercase.
+    direccion_evento = models.CharField(db_column='DIRECCION_EVENTO', max_length=128, blank=True)  # Field name made lowercase.
     estado_solicitud = models.CharField(db_column='ESTADO_SOLICITUD', max_length=20, blank=True)  # Field name made lowercase.
 
     class Meta:
