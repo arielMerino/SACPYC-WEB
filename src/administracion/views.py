@@ -77,10 +77,18 @@ class Administracion(TemplateView):
 		if self.context['nombre']==None:
 			self.context['error']='Debes iniciar sesión*'
 			return render(request,'login.html',self.context)
+
 		correo = request.POST.get('correo_garzon')
 		nombre = request.POST.get('nombre_garzon')
 		apellido = request.POST.get('apellido_garzon')
 		telefono = request.POST.get('telefono_garzon')
+
+		g = Garzon.objects.filter(mail_garzon=correo)
+
+		if g.count() > 0:
+			self.context['error'] = 'ERROR - ya existe un garzón asociado al correo*'
+			return render(request,'garzonesCrear.html',self.context)
+
 		garzon = Garzon(mail_garzon=correo, nombre_garzon=nombre, apellido_garzon=apellido,telefono_garzon=telefono)
 		garzon.save()
 
@@ -95,7 +103,7 @@ class Administracion(TemplateView):
 			listaGarzones.append(dicc)
 		self.context['garzones']=listaGarzones
 
-		return render(request,'garzones.html',self.context)
+		return render(request,'reload3.html',self.context)
 
 	def eliminarGarzon(self,request):
 		self.context['nombre']=request.session['nombre']
@@ -120,7 +128,7 @@ class Administracion(TemplateView):
 			listaGarzones.append(dicc)
 		self.context['garzones']=listaGarzones
 
-		return render(request,'garzones.html',self.context)
+		return render(request,'reload3.html',self.context)
 
 	def editarGarzon(self,request):
 		self.context['nombre']=request.session['nombre']
@@ -149,6 +157,16 @@ class Administracion(TemplateView):
 		apellido = request.POST.get('apellido_garzon')
 		telefono = request.POST.get('telefono_garzon')
 
+		g = Garzon.objects.filter(mail_garzon=correo)
+
+		if g.count() > 0 and correoAntiguo != correo:
+			self.context['error'] = 'ERROR - ya existe un garzón asociado al correo*'
+			self.context['correoG']=correoAntiguo
+			self.context['nombreG']=nombre
+			self.context['apellidoG']=apellido
+			self.context['telefonoG']=telefono
+			return render(request,'garzonesEd.html',self.context)
+
 		garzon = Garzon.objects.get(mail_garzon=correoAntiguo)
 		garzon.nombre_garzon=nombre
 		garzon.apellido_garzon=apellido
@@ -167,7 +185,7 @@ class Administracion(TemplateView):
 			listaGarzones.append(dicc)
 		self.context['garzones']=listaGarzones
 
-		return render(request,'garzones.html',self.context)
+		return render(request,'reload3.html',self.context)
 
 	def adminIngredientes(self,request):
 		self.context['nombre']=request.session['nombre']
@@ -276,6 +294,11 @@ class Administracion(TemplateView):
 	
 
 	def crearItem(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 		items = Item.objects.all()
 		tipositem = TipoItem.objects.all()
 
@@ -446,6 +469,11 @@ class Administracion(TemplateView):
 
 
 	def validarEditarItem(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 		iditem = request.session['iditem']
 		nombre = request.POST.get('nombreI')
 		idtipo = request.POST.get('tipoI')
@@ -492,7 +520,7 @@ class Administracion(TemplateView):
 				self.context['tiposItem'] = listaTipos
 				self.context['items'] = listaItems
 
-				return render(request,'item.html',self.context)
+				return render(request,'reload1.html',self.context)
 
 		if listaItems.count() > 0:
 
@@ -571,9 +599,14 @@ class Administracion(TemplateView):
 		self.context['tiposItem'] = listaTipos
 		self.context['items'] = listaItems
 
-		return render(request,'item.html',self.context)
+		return render(request,'reload1.html',self.context)
 
 	def editarItem(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 		idI = request.POST.get('item')
 
 		request.session['iditem'] = idI
@@ -618,6 +651,11 @@ class Administracion(TemplateView):
 
 
 	def eliminarItem(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 		item = request.POST.get('item')
 		q = Item.objects.get(iditem=item)
 		q.delete()
@@ -651,10 +689,15 @@ class Administracion(TemplateView):
 		self.context['tiposItem'] = listaTipos
 		self.context['items'] = listaItems
 
-		return render(request,'item.html',self.context)
+		return render(request,'reload1.html',self.context)
 
 
 	def validarCrearItem(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 		nombreI = request.POST.get('nombreI')
 		tipoI = request.POST.get('tipoI')
 		idtipo = TipoItem.objects.get(idtipo=tipoI)
@@ -690,12 +733,22 @@ class Administracion(TemplateView):
 		self.context['tiposItem'] = listaTipos
 		self.context['items'] = listaItems
 
-		return render(request,'item.html',self.context)
+		return render(request,'reload1.html',self.context)
 
 	def crearTipoItem(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 		return render(request,'tipoItemAd.html',self.context)
 
 	def editarTipoItem(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 		idT = request.POST.get('tipoI')
 		tipo = TipoItem.objects.get(idtipo=idT)
 
@@ -706,6 +759,11 @@ class Administracion(TemplateView):
 		return render(request,'tipoItemEditar.html',self.context)
 
 	def eliminarTipoItem(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 		idT = request.POST.get('tipoI')
 		tipo = TipoItem.objects.get(idtipo=idT)
 		tipo.delete()
@@ -742,6 +800,11 @@ class Administracion(TemplateView):
 		return render(request,'redirect.html',self.context)
 
 	def validarCrearTipoItem(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 		nombreT = request.POST.get('nombreT')
 
 		tiposI = TipoItem.objects.filter(nombre_tipo=nombreT)
@@ -809,9 +872,14 @@ class Administracion(TemplateView):
 		self.context['tiposItem'] = listaTipos
 		self.context['items'] = listaItems
 
-		return render(request,'item.html',self.context)
+		return render(request,'reload1.html',self.context)
 
 	def validarEditarTipoItem(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 		idT = request.session['idT']
 		nombreT = request.POST.get('nombreT')
 		request.session['idT'] = None
@@ -864,7 +932,7 @@ class Administracion(TemplateView):
 		self.context['tiposItem'] = listaTipos
 		self.context['items'] = listaItems
 
-		return render(request,'item.html',self.context)
+		return render(request,'reload1.html',self.context)
 
 	def llamadaNotificaciones(self,request):
 		self.context['nombre']=request.session['nombre']
@@ -949,6 +1017,7 @@ class Administracion(TemplateView):
 			return render(request,'login.html',self.context)
 
 		datosProv = request.POST.get('proveedor')
+		print datosProv
 		tipo = datosProv.split(';')[0]
 		ID = datosProv.split(';')[1]
 		self.context['tipoP']=tipo
@@ -982,7 +1051,7 @@ class Administracion(TemplateView):
 			proveedores.append(proveedor)
 
 		self.context['proveedores']=proveedores
-		return render(request,'proveedores.html',self.context)
+		return render(request,'reload2.html',self.context)
 
 	def validarProveedoresUp(self,request):
 		self.context['nombre']=request.session['nombre']
@@ -1035,7 +1104,7 @@ class Administracion(TemplateView):
 			proveedores.append(proveedor)
 
 		self.context['proveedores']=proveedores
-		return render(request,'proveedores.html',self.context)
+		return render(request,'reload2.html',self.context)
 
 	def validarProveedoresAd(self,request):
 		self.context['nombre']=request.session['nombre']
@@ -1079,7 +1148,7 @@ class Administracion(TemplateView):
 
 		self.context['proveedores']=proveedores
 
-		return render(request,'proveedores.html',self.context)
+		return render(request,'reload2.html',self.context)
 
 	def llamadaTipoEvento(self,request):
 		self.context['nombre']=request.session['nombre']
@@ -1136,6 +1205,11 @@ class Administracion(TemplateView):
 		return render(request,'tipoeventoredirect2.html',self.context)
 
 	def llamadaTipoEventoConfMenu(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 		self.context["nombre_tipo_evento"] = request.session["nombre_tipo_evento"]
 		nombre = self.context["nombre_tipo_evento"]
 		evento = TipoEvento.objects.get(nombre_tipo_evento=nombre)
@@ -1513,9 +1587,19 @@ class Administracion(TemplateView):
 		return render(request,'utensilios.html',self.context)
 
 	def crearTipoUtensilio(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 		return render(request,'utensiliosTipoAdd.html',self.context)
 
 	def validarCrearTipoUtensilio(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 		nombreT = request.POST.get('nombreT')
 
 		tiposU = TipoUtensilio.objects.filter(nombre_tipo_utensilio=nombreT)
@@ -1589,6 +1673,11 @@ class Administracion(TemplateView):
 		return render(request,'utensilios.html',self.context)
 
 	def editarTipoUtensilio(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 		idT = request.POST.get('tipoU')
 		tipo = TipoUtensilio.objects.get(idtipoutensilio=idT)
 
@@ -1599,6 +1688,11 @@ class Administracion(TemplateView):
 		return render(request,'utensilioTipoEdit.html',self.context)
 
 	def validarEditarTipoUtensilio(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 		idT = request.session['idT']
 		nombreT = request.POST.get('nombreT')
 		request.session['idT'] = None
@@ -1654,6 +1748,11 @@ class Administracion(TemplateView):
 		return render(request,'utensilios.html',self.context)
 
 	def eliminarTipoUtensilio(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 		idT = request.POST.get('tipoU')
 		print idT
 		tipo = TipoUtensilio.objects.get(idtipoutensilio=idT)
@@ -1692,6 +1791,11 @@ class Administracion(TemplateView):
 		return render(request,'redirect2.html',self.context)
 
 	def crearUtensilio(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 		utensilios = Utensilio.objects.all()
 		tiposutensilios = TipoUtensilio.objects.all()
 
@@ -1725,6 +1829,11 @@ class Administracion(TemplateView):
 		return render(request,'utensiliosAdd.html',self.context)
 
 	def validarCrearUtensilio(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 		nombreU = request.POST.get('nombreU')
 		tipoU = request.POST.get('tipoU')
 		stockU = request.POST.get('stockU')
@@ -1767,6 +1876,11 @@ class Administracion(TemplateView):
 
 
 	def editarUtensilio(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 		idU = request.POST.get('utensilio')
 
 		request.session['idutensilio'] = idU
@@ -1814,6 +1928,11 @@ class Administracion(TemplateView):
 
 
 	def validarEditarUtensilio(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 		idU = request.session['idutensilio']
 		request.session['idutensilio'] = None
 		nombre = request.POST.get('nombreU')
@@ -1954,6 +2073,11 @@ class Administracion(TemplateView):
 
 
 	def eliminarUtensilio(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
 		idU = request.POST.get('utensilio')
 		q = Utensilio.objects.get(idutensilio=idU)
 		q.delete()

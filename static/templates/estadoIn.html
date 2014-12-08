@@ -10,4 +10,52 @@
 {%endblock%}
 
 {%block body%}
+	<h2>Datos de la solicitud:</h2>
+	
+	<table class='table table-striped'>
+		<tr>
+			<th>Tipo Evento:</th>
+			<td>{{tipoevento}}</td>
+			<th>Estado Evento:</th>
+			<td>{{estado}}</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+	</table>
+	<table class='table table-striped'>
+		<tr>
+			<th>Dirección Evento:</th>
+			<td>{{direccion}}</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+		</tr>
+	</table>
+	<table class='table table-striped'>
+		<tr>	
+			<th>Duración Evento:</th>
+			<td>{{duracion}}</td>
+			<th>Fecha Evento:</th>
+			<td>{{fecha}}</td>
+		</tr>
+		<tr>
+			<th>ítems Evento:</th>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		{%for i in items%}
+			<tr>
+				<td></td>
+				<td>{{i}}</td>
+				<td></td>
+				<td></td>
+			</tr>
+		{%endfor%}
+	</table>
 {%endblock%}

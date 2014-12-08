@@ -17,7 +17,20 @@ class Home(TemplateView):
 		return render(request,'home.html',self.context)
 
 	def llamadaCotizar(self,request):
-
+		request.session['nombre'] = None
+		request.session['apellido']= None
+		request.session['phone']= None
+		request.session['email']= None
+		request.session['direccion']= None
+		request.session['fecha']= None
+		request.session['duracion']= None
+		request.session['invitados']= None
+		request.session['idTipoEvento']= None
+		request.session['nombreTipoEven']= None
+		request.session['idTipoMenu']= None
+		request.session['nombreTipoMe']= None
+		request.session['items']= None
+		request.session['nombresItems']= None
 		return render(request,'cotizar.html',self.context)
 
 	def llamadaCotizarEv(self,request):
@@ -56,6 +69,8 @@ class Home(TemplateView):
 			self.context['descripcion'] = tE.desripcion_evento
 			self.context['tipoEvento'] = request.POST.get('tipoEvento')
 			self.context['nombretipoevento'] = tE.nombre_tipo_evento
+			request.session['idTipoEvento'] = idTE
+			request.session['nombreTipoEvento'] = tE.nombre_tipo_evento
 
 			a = TipoMenu.objects.filter(idtipoevento=tE)
 			cruza = []
@@ -79,6 +94,8 @@ class Home(TemplateView):
 			self.context['tipoMenu'] = idTM
 			self.context['nombretipomenu'] = TipoMenu.objects.get(idtipomenu=idTM).nombre_tipo_menu
 			itemsMenu = ItemMenu.objects.filter(idtipomenu=idTM)
+			request.session['idTipoMenu'] = idTM
+			request.session['nombreTipoMenu'] = self.context['nombretipomenu']
 			items=[]
 			for entrada in itemsMenu:
 				idItem = entrada.iditem.iditem
@@ -118,6 +135,9 @@ class Home(TemplateView):
 
 
 	def cotizarResumen(self,request):
+		if (not request.session['idTipoMenu']) or (not request.session['nombreTipoEvento']):
+			self.context['error'] = 'ERROR - Debe seleccionarse un tipo de Evento un tipo de menú y a lo menos un ítem*'
+			return render(request,'reload4.html',self.context)
 		items = request.POST.getlist('items')
 		request.session['items'] = items
 		arreglo = []
@@ -133,7 +153,6 @@ class Home(TemplateView):
 		self.context['email'] = request.session['email']
 		self.context['direccion'] = request.session['direccion']
 		self.context['fecha'] = request.session['fecha']
-		self.context['hora'] = request.session['hora']
 		self.context['duracion'] = request.session['duracion']
 		self.context['invitados'] = request.session['invitados']
 		self.context['idevento'] = request.session['idTipoEvento']
@@ -204,7 +223,7 @@ class Home(TemplateView):
 			c = Cliente.objects.filter(mail_cliente=request.session['email'])
 
 
-		sol = SolicitudDeCotizacion(estado_solicitud='generada',mail_cliente = c[0],idtipoevento = TipoEvento.objects.get(idtipoevento=request.session['idTipoEvento']),cantidad_asistentes = request.session['invitados'],fecha_tentativa = request.session['fecha'],duracion_tentativa = request.session['duracion'],nombre_evento = request.session['nombreTipoEvento'],direccion_evento = request.session['direccion'])
+		sol = SolicitudDeCotizacion(estado_solicitud='pendiente',mail_cliente = c[0],idtipoevento = TipoEvento.objects.get(idtipoevento=request.session['idTipoEvento']),cantidad_asistentes = request.session['invitados'],fecha_tentativa = request.session['fecha'],duracion_tentativa = request.session['duracion'],nombre_evento = request.session['nombreTipoEvento'],direccion_evento = request.session['direccion'])
 		sol.save()
 
 

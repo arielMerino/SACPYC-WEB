@@ -2,7 +2,7 @@
 {%block menuIzq%}
 	<div id="menu-lateral" class="panel fondo">
 		<p></p>
-		<button id="nuevaCot" type="button" class="btn-lat btn btn-default btn-lg frente" >Nueva Cotización</button>
+		<a id="nuevaCot" href='/Cotizar/' class="btn-lat btn btn-default btn-lg frente" >Nueva Cotización</a>
 		<p></p>
 		<a id="estadoCot" href='/Estado/' class="btn-lat btn btn-default btn-lg frente" >Estado Cotización</a>
 		<p></p>
@@ -23,7 +23,7 @@
 			{%endfor%}
 		</select>
 		<br>
-		<input type='submit' class='btn btn-default' value='Seleccionar'>
+		<input type='submit' id='sub1' class='btn btn-default' value='Seleccionar' >
 	</form>
 	<br><br>
 	<label>Descripción del Evento: </label>
@@ -42,7 +42,7 @@
 			{%endfor%}
 		</select>
 		<br>
-		<input type='submit' class='btn btn-default' value='Seleccionar'>
+		<input type='submit' id='sub2' class='btn btn-default' value='Seleccionar'>
 	</form>
 	<br><br>
 	<form id='carta' method='POST' action='/CotizarResumen/'>{%csrf_token%}
@@ -69,7 +69,7 @@
 									<td></td>
 									<td>{{entrada.nombreitem}}</td>
 									<td>
-										<input	type='checkbox' name='items' value='{{entrada.iditem}}'>
+										<input	id='sub3' type='checkbox' name='items' value='{{entrada.iditem}}' required>
 									</td>
 								</tr>
 							{%endif%}

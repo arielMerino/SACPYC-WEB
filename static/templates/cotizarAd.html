@@ -1,24 +1,21 @@
 {%extends "base2.html"%}
 {%block body%}
 
-				<div class="row">
-		    			<h3>Solicitudes Pendietes:</h3>
-		    			<table class='table table-striped'>
-			    			{%for cot in cotizacion%}
-			    			<tr>
-			    				<td>{{cot.mail_cliente.nombre_cliente}}</td>
-			    				<td>{{cot.mail_cliente.apellido_cliente}}</td>
-			    				<td>{{cot.idtipoevento.nombre_tipo_evento}}</td>
-			    				<td>
-									<input type='radio' value='{{cotidsolicitudcotizacion}}' name='IdSolCot' checked/>
-								</td>	
-			    			</tr>
-			    			{%endfor%}
-		    			</table>
-		    			<h3>Cotizaciones enviadas:</h3>
-	    				<p>Cliente; fecha</p>
-				
-			</div>
+	<div class="row">
+		<h3>Solicitudes Pendietes:</h3>
+		<table class='table table-striped'>
+			{%for cot in cotizacion%}
+			<tr>
+				<td>{{cot.mail_cliente.nombre_cliente}}</td>
+				<td>{{cot.mail_cliente.apellido_cliente}}</td>
+				<td>{{cot.idtipoevento.nombre_tipo_evento}}</td>
+				<td>
+					<input type='radio' value='{{cotidsolicitudcotizacion}}' name='IdSolCot' checked/>
+				</td>	
+			</tr>
+			{%endfor%}
+		</table>
+	</div>
 
 {%endblock%}
 {%block js%}
