@@ -1,0 +1,28 @@
+{%extends "base.html"%}
+{%block menuIzq%}
+	<div id="menu-lateral" class="panel fondo">
+		<p></p>
+		<button id="nuevaCot" type="button" class="btn-lat btn btn-default btn-lg frente" >Nueva Cotización</button>
+		<p></p>
+		<a id="estadoCot" href='/Estado/' class="btn-lat btn btn-default btn-lg frente" >Estado Cotización</a>
+		<p></p>
+	</div>
+{%endblock%}
+{%block body%}
+	<div class='row'>
+		<h2>Sigue el estado de tus cotizaciones:</h2>
+		<div class='col-xs-2'></div>
+		<div class='panel panel-default col-xs-8 row'>
+			<label style='color:red;'>{{error}}</label>
+			<form method='POST' action='/EstadoIn/'>{%csrf_token%}
+				<label>Código de tu solicitud*:</label>
+				<input type='text' name='codigo' class='form-control' required>
+				<label>Email*:</label>
+				<input type='email' name='email' class='form-control' required>
+				<br>
+				<input type='submit' value='ingresar' class='btn btn-default'>
+				<label>Los campos marcados con * son obligatorios!!</label>
+			</form>
+		</div>
+	</div>
+{%endblock%}

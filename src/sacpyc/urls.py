@@ -65,6 +65,9 @@ urlpatterns = patterns('',
     url(r'^CrearIngrediente/',Administracion().crearIngrediente),
     url(r'^ValidarCrearIngrediente/',Administracion().validarCrearIngrediente),
     url(r'^EditarIngrediente/',Administracion().editarIngrediente),
+    url(r'^Estado/',Home().estado),
+    url(r'^EstadoIn/',Home().estadoIn),
+    url(r'^EstadoDel/',Home().estadoDel),
     url(r'^ValidarEditarIngrediente/',Administracion().validarEditarIngrediente),
     url(r'^EliminarIngrediente/',Administracion().eliminarIngrediente),
     url(r'^CrearTipoUtensilio/',Administracion().crearTipoUtensilio),
@@ -77,7 +80,6 @@ urlpatterns = patterns('',
     url(r'^EditarUtensilio/',Administracion().editarUtensilio),
     url(r'^ValidarEditarUtensilio/',Administracion().validarEditarUtensilio),
     url(r'^EliminarUtensilio/',Administracion().eliminarUtensilio),
-
     # url(r'^blog/', include('blog.urls')),
 ) 
 
