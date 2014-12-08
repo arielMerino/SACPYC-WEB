@@ -1164,7 +1164,7 @@ class Administracion(TemplateView):
 		self.context["tipos_item"] = lista_tipos
 		self.context["nombre_menu"] = request.POST.get("seleccion")
 		self.context["nombre_tipo_evento"] = request.session["nombre_tipo_evento"]
-		request.session["nombre_tipo_evento"] = self.context["nombre_tipo_evento"]
+		request.session["nombre_evento"] = self.context["nombre_tipo_evento"]
 		request.session["nombre_menu"] = self.context["nombre_menu"]
 		return render(request,'tipoeventoMenuItem.html',self.context)
 
