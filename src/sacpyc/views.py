@@ -139,6 +139,30 @@ class Home(TemplateView):
 
 		return render(request,'cotizarResumen.html',self.context)
 
+	def estado(self,request):
+		request.session['codigo'] = None
+		request.session['email'] = None
+		return render(request,'estado.html',self.context)
+
+	def estadoIn(self,request):
+		if (request.POST.get('codigo')==None or request.POST.get('email')==None)and(request.session['codigo']==None or request.session['email']==None):
+			self.context['error'] = 'ERROR - debe indicar un código y un correo válido*'
+			return render(request,'estado.html',self.context)
+		codigo = request.POST.get('codigo')
+		email = request.POST.get('email')
+		solicitud = SolicitudDeCotizacion.objects.filter(idsolicitudcotizacion=codigo)
+		if solicitud.count() > 0:
+			if solicitud[0].mail_cliente.mail_cliente == email:
+				request.session['codigo'] = codigo
+				request.session['email'] = email
+
+				sol = SolicitudDeCotizacion.objects.get(idsolicitudcotizacion=codigo)
+				
+
+				return render(request,'estadoIn.html',self.context)
+		self.context['error'] = 'ERROR - debe indiar un código y un correo válido*'
+		return render(request,'estado.html',self.context)
+
 	def mail(self,request):
 
 		c = Cliente.objects.filter(mail_cliente=request.session['email'])
@@ -148,22 +172,26 @@ class Home(TemplateView):
 			client.save()
 			c = Cliente.objects.filter(mail_cliente=request.session['email'])
 
-		print c[0]
-		print TipoEvento.objects.get(idtipoevento=request.session['idTipoEvento'])
-		print request.session['invitados']
-		print request.session['fecha']
-		print request.session['duracion']
-		print request.session['nombreTipoEvento']
-		print request.session['direccion']
-		#print request.POST.get['comentarios']
-		sol = SolicitudDeCotizacion(mail_cliente = c[0],idtipoevento = TipoEvento.objects.get(idtipoevento=request.session['idTipoEvento']),cantidad_asistentes = request.session['invitados'],fecha_tentativa = request.session['fecha'],duracion_tentativa = request.session['duracion'],nombre_evento = request.session['nombreTipoEvento'],direccion_evento = request.session['direccion'])
+
+		sol = SolicitudDeCotizacion(estado_solicitud='generada',mail_cliente = c[0],idtipoevento = TipoEvento.objects.get(idtipoevento=request.session['idTipoEvento']),cantidad_asistentes = request.session['invitados'],fecha_tentativa = request.session['fecha'],duracion_tentativa = request.session['duracion'],nombre_evento = request.session['nombreTipoEvento'],direccion_evento = request.session['direccion'])
 		sol.save()
+
 
 		sol = SolicitudDeCotizacion.objects.filter(mail_cliente=request.session['email'])
 		arr = []
 		for s in sol:
 			arr.append(s.idsolicitudcotizacion)
 		idsol = max(arr)
+
+		items = request.session['items']
+
+		for item in items:
+			sol = SolicitudDeCotizacion.objects.get(idsolicitudcotizacion=idsol)
+			i = Item.objects.get(iditem=item)
+			print sol
+			print i
+			it = ItemSolicitudDeCotizacion(iditem=i,idsolicitudcotizacion=sol)
+			it.save()
 
 		a = 'Su Solicitud de cotizacion ha sido enviada satisfactoriamente, utilice el codigo de seguridad: '
 		b = ' para ver el estado de su cotizaci0n.'
@@ -172,6 +200,14 @@ class Home(TemplateView):
 		email.send()
 		
 		return render(request,'mail.html',self.context)
+
+	def estadoDel(self,request):
+		codigo = request.session['codigo']
+		sol = SolicitudDeCotizacion.objects.filter(idsolicitudcotizacion=codigo)
+		if sol.count() > 0:
+			sol[0].delete()
+
+		return render(request,'estadoIn.html',self.context)
 
 	def llamadaContacto(self,request):
 		return render(request,'contacto.html',self.context)		
