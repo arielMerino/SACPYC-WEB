@@ -1150,6 +1150,7 @@ class Administracion(TemplateView):
 		if self.context['nombre']==None:
 			self.context['error']='Debes iniciar sesión*'
 			return render(request,'login.html',self.context)
+			
 		lista_item = []
 		lista_tipos = []
 		tipos = TipoItem.objects.all()
