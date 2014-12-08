@@ -65,6 +65,10 @@ class Home(TemplateView):
 				dicc['idtipoevento'] = tipo.idtipoevento
 				dicc['nombretipomenu'] = tipo.nombre_tipo_menu
 				cruza.append(dicc)
+
+			for i in cruza:
+				print i['nombretipomenu']
+
 			self.context['menus'] = cruza
 			request.session['idTipoEvento'] = idTE
 			request.session['nombreTipoEvento'] = tE.nombre_tipo_evento
@@ -87,12 +91,14 @@ class Home(TemplateView):
 			
 			tipos = []
 			for entrada in items:
-				if not entrada['nombretipoitem'] in items:
+				if not entrada['nombretipoitem'] in tipos:
 					tipos.append(entrada['nombretipoitem'])
+
 			self.context['tipos'] = tipos
 			self.context['cruzaItems'] = items
 			request.session['idTipoMenu'] = idTM
 			request.session['nombreTipoMenu'] = self.context['nombretipomenu']
+
 
 		eventos = TipoEvento.objects.all()
 		eventosMostrar=[]
@@ -157,7 +163,32 @@ class Home(TemplateView):
 				request.session['email'] = email
 
 				sol = SolicitudDeCotizacion.objects.get(idsolicitudcotizacion=codigo)
-				
+				tipoEvento = sol.idtipoevento.nombre_tipo_evento
+				invitados = sol.cantidad_asistentes
+				duracion = sol.duracion_tentativa
+				f = str(sol.fecha_tentativa)
+				f = f.split(' ')
+				h = f[1].split(':')
+				f = f[0].split('-')
+				fecha = f[2]+'/'+f[1]+'/'+f[0]
+				hora = h[0]+':'+h[1]
+				direccion = sol.direccion_evento
+				estado = sol.estado_solicitud
+				print fecha
+				print hora
+
+				idsitems = ItemSolicitudDeCotizacion.objects.filter(idsolicitudcotizacion=codigo)
+				lista = []
+				for i in idsitems:
+					lista.append(i.iditem.nombre_item)
+				self.context['items']=lista
+				self.context['tipoevento']=tipoEvento
+				self.context['invitados']=invitados
+				self.context['duracion']=duracion
+				self.context['fecha']=fecha
+				self.context['hora']=hora
+				self.context['direccion']=direccion
+				self.context['estado']=estado
 
 				return render(request,'estadoIn.html',self.context)
 		self.context['error'] = 'ERROR - debe indiar un código y un correo válido*'
