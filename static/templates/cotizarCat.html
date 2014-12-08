@@ -65,13 +65,13 @@
 						</tr>
 						{%for entrada in cruzaItems%}
 							{%if entrada.nombretipoitem == tipo%}
-							<tr>
-								<td></td>
-								<td>{{entrada.nombreitem}}</td>
-								<td>
-									<input	type='checkbox' name='items' value='{{entrada.iditem}}'>
-								</td>
-							</tr>
+								<tr>
+									<td></td>
+									<td>{{entrada.nombreitem}}</td>
+									<td>
+										<input	type='checkbox' name='items' value='{{entrada.iditem}}'>
+									</td>
+								</tr>
 							{%endif%}
 						{%endfor%}
 					</tbody>
