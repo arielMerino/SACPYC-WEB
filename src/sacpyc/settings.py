@@ -70,6 +70,12 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'ariel.merino@usach.cl'
+EMAIL_HOST_PASSWORD = 'qwerty123'
+EMAIL_USE_TLS = True
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'

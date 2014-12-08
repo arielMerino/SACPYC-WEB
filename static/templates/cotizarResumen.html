@@ -1,0 +1,91 @@
+{%extends "base.html"%}
+{%block body%}
+	<h2>Resumen de Selección:</h2><br>
+	<table id='resumen' class='table table-striped'>
+		<tbody>
+			<tr>
+				<th>Datos del Usuario:</th>
+				<th></th>
+				<th></th>
+				<th></th>
+			</tr>
+			<tr>
+				<th>Nombre:</th>
+				<th>Apellido:</th>
+				<th>Teléfono:</th>
+				<th>Mail:</th>
+			</tr>
+			<tr>
+				<td>{{nombre}}</td>
+				<td>{{apellido}}</td>
+				<td>{{phone}}</td>
+				<td>{{email}}</td>
+			</tr>
+			<tr>
+				<th>Datos del Evento:</th>
+				<th></th>
+				<th></th>
+				<th></th>
+			</tr>
+			<tr>
+				<th>Dirección:</th>
+				<th>Fecha y Hora:</th>
+				<th>Duración:</th>
+				<th>Invitados:</th>
+			</tr>
+			<tr>
+				<td>{{direccion}}</td>
+				<td>{{fecha}}</td>
+				<td>{{duracion}} Horas</td>
+				<td>{{invitados}} Personas</td>
+			</tr>
+			<tr>
+				<th>Tipo de Evento:</th>
+				<th>Tipo de Menú:</th>
+				<th></th>
+				<th></th>
+			</tr>
+			<tr>
+				<td>{{nombreevento}}</td>
+				<td>{{nombretipomenu}}</td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<th>Menú Seleccionado</th>
+				<th></th>
+				<th></th>
+				<th></th>
+			</tr>
+			<tr>
+				<th>Item</th>
+				<th></th>
+				<th></th>
+				<th></th>
+			</tr>
+			{%for tipo in nombresitems%}
+				<tr>
+					<td>{{tipo}}</td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			{%endfor%}
+		</tbody>
+	</table>	
+	<br>
+	<form method='POST' action='/mail/'>{%csrf_token%}
+		<label for='comentarios'>Comentarios o Sugerencias:</label>
+		<textarea name='comentarios' class='form-control' cols='45' rows='22' style='height:100px;overflow:auto;'></textarea>
+		<br>
+		<div class='row'>
+			<div class='col-xs-3'>
+				<a class='btn btn-default' href="/">Cancelar</a>
+			</div>
+			<div class='col-xs-6'></div>
+			<div class='col-xs-3'>
+				<input type='submit' value='Enviar Solicitud' class='btn btn-default'>
+			</div>
+		</div>
+	</form>
+{%endblock%}

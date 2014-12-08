@@ -7,12 +7,14 @@ from administracion.views import *
 
 urlpatterns = patterns('',
     # Examples:
+    url(r'^mail/',Home().mail),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$',Home().inicio),
     url(r'^Cotizar/',Home().llamadaCotizar),
     url(r'^CotizarEv/$',Home().llamadaCotizarEv),
 	url(r'^CotizarCat/$',Home().llamadaCotizarCat),
 	url(r'^Contacto/$', Home().llamadaContacto),
+    url(r'^CotizarResumen/',Home().cotizarResumen),
     url(r'^Agenda/',Administracion().llamadaAgenda),
     url(r'^Compras/',Administracion().llamadaCompras),
     url(r'^CotizarAd/',Administracion().llamadaCotizarAd),
@@ -54,7 +56,7 @@ urlpatterns = patterns('',
     url(r'^TipoEventoEMenu/',Administracion().llamadaTipoEventoEMenu),
     url(r'^ElminarItemMenu/',Administracion().eliminarItemMenu),
     url(r'^AgregarItemMenu/',Administracion().agregarItemMenu),
-
+    url(r'^Reload',Home().reload),
     # url(r'^blog/', include('blog.urls')),
 ) 
 
