@@ -1,0 +1,41 @@
+{%extends "base2.html"%}
+{%block body%}
+	<div class="row">
+		<div class='col-xs-3'></div>
+		
+		<div class="col-xs-6">
+			<h2>Crear Ítem:</h2>
+			<form method='POST' action='/ValidarEditarUtensilio/'/>{%csrf_token%}
+				<label style='color:red'>{{error}}</label><br>
+				<label for='nombreU'>Nombre Utensilio*:</label>
+				<input type='text' name='nombreU' class='form-control' value='{{nombre_utensilio}}' required/>
+
+				<label for='stockU'>Stock Actual Utensilio*:</label>
+				<input type='text' name='stockU' pattern='\d+' class='form-control' value='{{stockU}}' required/>
+
+				<label for='stockM'>Stock Mínimo Utensilio*:</label>
+				<input type='text' name='stockM' pattern='\d+' class='form-control' value='{{stockM}}' required/>
+
+				<label for='tipoU'>Tipo Utensilio*:</label>
+				<select name='tipoU' class='form-control'>
+						<option value='{{idtipoutensilio}}'>{{tipoUtnsilio}}</option>
+					{%for tipo in tiposUtensilio%}
+						{%if tipo.idT != idtipoutensilio%}
+						<option value='{{tipo.idT}}'>{{tipo.nombreT}}</option>
+						{%endif%}
+					{%endfor%}
+				</select>
+				<br>
+				<input type='submit' class='btn btn-default' value='aceptar' />
+			</form>
+		</div>
+	</div>
+
+
+{%endblock%}
+{%block js%}
+	<script type="text/javascript" src="/static/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript">
+	document.getElementById('gar').className="btn btn-default active";
+	</script>
+{%endblock%}

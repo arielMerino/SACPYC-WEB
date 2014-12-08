@@ -184,6 +184,7 @@ class Administracion(TemplateView):
 		self.context["lista_ingredientes"] = listaIngredientes
 		return render(request,'ingredientes.html',self.context)
 
+
 	def llamadaItem(self,request):
 		self.context['nombre']=request.session['nombre']
 		self.context['apellido']=request.session['apellido']
@@ -267,32 +268,7 @@ class Administracion(TemplateView):
 		self.context["lista_ingredientes"] = listaIngredientes
 		return render(request,'ingredientes.html',self.context)
 
-	def editarIngrediente(self,request):
-		self.context['nombre']=request.session['nombre']
-		self.context['apellido']=request.session['apellido']
-		if self.context['nombre']==None:
-			self.context['error']='Debes iniciar sesión*'
-			return render(request,'login.html',self.context)
-
-		idI = request.POST.get('ingr')
-		ingrediente = Ingrediente.objects.get(idingrediente=idI)
-		self.context['idingr'] = idI
-		self.context['nombre_ingrediente'] = ingrediente.nombre_ingrediente
-		self.context['stockMin'] = ingrediente.stockMin
-		self.context['stockAct'] = ingrediente.stockAct
-
-		ingredientes = Ingrediente.objects.all()
-		listaIngredientes = []
-
-		for tipo in ingredientes:
-			dicc = {}
-			dicc["idI"] = tipo.idingrediente
-			dicc["nombreIng"] = tipo.nombre_ingrediente
-			dicc["stockAct"] = tipo.stock_ingrediente
-			dicc["stockMin"] = tipo.stock_minimo_ingrediente
-			listaIngredientes.append(dicc)
-		self.context["lista_ingredientes"] = listaIngredientes
-		return render(request,'ingredientesE.html',self.context)
+	
 
 	def crearItem(self,request):
 		items = Item.objects.all()
@@ -325,8 +301,146 @@ class Administracion(TemplateView):
 		self.context['items'] = listaItems
 
 		return render(request,'itemAd.html',self.context)
-	def validarEditarItem(self,request):
 
+
+	def eliminarIngrediente(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
+
+		idIng = request.POST.get('ingr')
+		ingrediente = Ingrediente.objects.get(idingrediente=idIng)
+		ingrediente.delete()
+
+		ingredientes = Ingrediente.objects.all()
+		listaIngredientes = []
+
+		for item in ingredientes:
+			dicc = {}
+			dicc["idI"] = item.idingrediente
+			dicc["nombreIng"] = item.nombre_ingrediente
+			dicc["stockAct"] = item.stock_ingrediente
+			dicc["stockMin"] = item.stock_minimo_ingrediente
+			listaIngredientes.append(dicc)
+		self.context["lista_ingredientes"] = listaIngredientes
+		print "flag_final"
+		return render(request,'ingredientes.html',self.context)
+
+	def editarIngrediente(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
+
+		idIng = request.POST.get('ingr')
+		request.session['idingr'] = idIng
+
+		ingrediente = Ingrediente.objects.get(idingrediente=idIng)
+		self.context['idingr'] = idIng
+		self.context['nombre_ingrediente'] = ingrediente.nombre_ingrediente
+		self.context['stockMin'] = ingrediente.stock_ingrediente
+		self.context['stockAct'] = ingrediente.stock_minimo_ingrediente
+
+		ingredientes = Ingrediente.objects.all()
+		listaIngredientes = []
+
+		for item in ingredientes:
+			dicc = {}
+			dicc["idI"] = item.idingrediente
+			dicc["nombreIng"] = item.nombre_ingrediente
+			dicc["stockAct"] = item.stock_ingrediente
+			dicc["stockMin"] = item.stock_minimo_ingrediente
+			listaIngredientes.append(dicc)
+		self.context["lista_ingredientes"] = listaIngredientes
+		print "flag_final"
+		return render(request,'ingredientesE.html',self.context)
+
+	def validarEditarIngrediente(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
+
+		self.context["id_ing"] = request.session["idingr"]
+		request.session["idingr"] = None
+		idI = self.context["id_ing"]
+		nombre = request.POST.get("nombre_ingrediente")
+		stockMin = request.POST.get("stockMin")
+		stockAct = request.POST.get("stockAct")
+
+		listaIngredientes = Ingrediente.objects.filter(nombre_ingrediente=nombre)
+		if listaIngredientes.count() == 1:
+			print "flag"
+			if int(listaIngredientes[0].idingrediente) == int(idI):
+				ingred = Ingrediente.objects.get(idingrediente=idI)
+				print ingred.nombre_ingrediente
+				ingred.nombre_ingrediente = nombre
+				ingred.stock_ingrediente = stockAct
+				ingred.stock_minimo_ingrediente = stockMin
+				ingred.save()
+
+				ingredientes = Ingrediente.objects.all()
+				listaIngredientes2 = []
+
+				for tipo in ingredientes:
+					dicc = {}
+					dicc["idI"] = tipo.idingrediente
+					dicc["nombreIng"] = tipo.nombre_ingrediente
+					dicc["stockAct"] = tipo.stock_ingrediente
+					dicc["stockMin"] = tipo.stock_minimo_ingrediente
+					listaIngredientes2.append(dicc)
+				self.context["lista_ingredientes"] = listaIngredientes2
+				return render(request,'ingredientes.html',self.context)
+
+		elif listaIngredientes.count() > 0:
+			self.context['error'] = 'ERROR - el nombre selsccionado ya existe*'
+
+			ingred = Ingrediente.objects.get(idingrediente=idI)
+			self.context["idingr"] = idI
+			self.context["nombre_ingrediente"] = nombre
+			self.context["stockAct"] = stockAct
+			self.context["stockMin"] = stockMin
+
+			ingredientes = Ingrediente.objects.all()
+			listaIngredientes2 = []
+
+			for tipo in ingredientes:
+				dicc = {}
+				dicc["idI"] = tipo.idingrediente
+				dicc["nombreIng"] = tipo.nombre_ingrediente
+				dicc["stockAct"] = tipo.stock_ingrediente
+				dicc["stockMin"] = tipo.stock_minimo_ingrediente
+				listaIngredientes2.append(dicc)
+			self.context["lista_ingredientes"] = listaIngredientes2
+			return render(request,'ingredientesE.html',self.context)
+		else:
+			ingred = Ingrediente.objects.get(idingrediente=idI)
+			ingred.nombre_ingrediente = nombre
+			ingred.stock_ingrediente = stockAct
+			ingred.stock_minimo_ingrediente = stockMin
+			ingred.save()
+
+			ingredientes = Ingrediente.objects.all()
+			listaIngredientes2 = []
+
+			for tipo in ingredientes:
+				dicc = {}
+				dicc["idI"] = tipo.idingrediente
+				dicc["nombreIng"] = tipo.nombre_ingrediente
+				dicc["stockAct"] = tipo.stock_ingrediente
+				dicc["stockMin"] = tipo.stock_minimo_ingrediente
+				listaIngredientes2.append(dicc)
+			self.context["lista_ingredientes"] = listaIngredientes2
+			return render(request,'ingredientes.html',self.context)
+
+
+
+
+	def validarEditarItem(self,request):
 		iditem = request.session['iditem']
 		nombre = request.POST.get('nombreI')
 		idtipo = request.POST.get('tipoI')
@@ -532,7 +646,6 @@ class Administracion(TemplateView):
 		self.context['tiposItem'] = listaTipos
 		self.context['items'] = listaItems
 
-		return render(request,'item.html',self.context)
 		return render(request,'item.html',self.context)
 
 
@@ -1284,7 +1397,538 @@ class Administracion(TemplateView):
 		return render(request,'cocina.html',self.context)
 
 	def adminUtensilios(self,request):
-		return render(request,'cocina.html',self.context)
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
+
+		utensilios = Utensilio.objects.all()
+		tiposutensilios = TipoUtensilio.objects.all()
+
+		listaUtensilios = []
+		listaTipos = []
+
+		for tipo in tiposutensilios:
+			dicc = {}
+			contador = 0
+			dicc['idT'] = tipo.idtipoutensilio
+			dicc['nombreT'] = tipo.nombre_tipo_utensilio
+			for utens in utensilios:
+				if utens.idtipoutensilio == tipo:
+					contador+=1
+			dicc['cantidadT'] = contador
+			listaTipos.append(dicc)
+
+		for utens in utensilios:
+			dicc = {}
+			dicc['idU'] = utens.idutensilio
+			dicc['idT'] = utens.idtipoutensilio.nombre_tipo_utensilio
+			dicc['nombreU'] = utens.nombre_utensilio
+			dicc['stockU'] = utens.stock_utensilio
+			dicc['stockM'] = utens.stock_minimo_utensilio
+			listaUtensilios.append(dicc)
+
+		self.context['tiposUtensilo'] = listaTipos
+		self.context['utensilios'] = listaUtensilios
+		return render(request,'utensilios.html',self.context)
+
+	def crearTipoUtensilio(self,request):
+		return render(request,'utensiliosTipoAdd.html',self.context)
+
+	def validarCrearTipoUtensilio(self,request):
+		nombreT = request.POST.get('nombreT')
+
+		tiposU = TipoUtensilio.objects.filter(nombre_tipo_utensilio=nombreT)
+		if tiposU.count() > 0:
+
+			utensilios = Utensilio.objects.all()
+			tiposutensilios = TipoUtensilio.objects.all()
+
+			listaUtensilios = []
+			listaTipos = []
+
+			for tipo in tiposutensilios:
+				dicc = {}
+				contador = 0
+				dicc['idT'] = tipo.idtipoutensilio
+				dicc['nombreT'] = tipo.nombre_tipo_utensilio
+				print tipo.nombre_tipo_utensilio
+				for utens in utensilios:
+					if utens.idtipoutensilio == tipo:
+						contador+=1
+				dicc['cantidadT'] = contador
+				listaTipos.append(dicc)
+
+			for utens in utensilios:
+				dicc = {}
+				dicc['idU'] = utens.idutensilio
+				dicc['idT'] = utens.idtipoutensilio.nombre_tipo_utensilio
+				dicc['nombreU'] = utens.nombre_utensilio
+				dicc['stockU'] = utens.stock_utensilio
+				dicc['stockM'] = utens.stock_minimo_utensilio
+				listaUtensilios.append(dicc)
+
+			self.context['tiposUtensilo'] = listaTipos
+			self.context['utensilios'] = listaUtensilios
+			self.context['error'] = 'ERROR - El tipo de utensilio ya ue ingresado*'
+			return render(request,'utensilios.html',self.context)
+
+		tipoUtensilio = TipoUtensilio(nombre_tipo_utensilio=nombreT)
+		tipoUtensilio.save()
+
+		utensilios = Utensilio.objects.all()
+		tiposutensilios = TipoUtensilio.objects.all()
+
+		listaUtensilios = []
+		listaTipos = []
+
+		for tipo in tiposutensilios:
+			dicc = {}
+			contador = 0
+			dicc['idT'] = tipo.idtipoutensilio
+			dicc['nombreT'] = tipo.nombre_tipo_utensilio
+			print tipo.nombre_tipo_utensilio
+			for utens in utensilios:
+				if utens.idtipoutensilio == tipo:
+					contador+=1
+			dicc['cantidadT'] = contador
+			listaTipos.append(dicc)
+
+		for utens in utensilios:
+			dicc = {}
+			dicc['idU'] = utens.idutensilio
+			dicc['idT'] = utens.idtipoutensilio.nombre_tipo_utensilio
+			dicc['nombreU'] = utens.nombre_utensilio
+			dicc['stockU'] = utens.stock_utensilio
+			dicc['stockM'] = utens.stock_minimo_utensilio
+			listaUtensilios.append(dicc)
+
+		self.context['tiposUtensilo'] = listaTipos
+		self.context['utensilios'] = listaUtensilios
+
+		return render(request,'utensilios.html',self.context)
+
+	def editarTipoUtensilio(self,request):
+		idT = request.POST.get('tipoU')
+		tipo = TipoUtensilio.objects.get(idtipoutensilio=idT)
+
+		self.context['idT'] = idT
+		self.context['nombreT'] = tipo.nombre_tipo_utensilio
+		request.session['idT'] = idT
+
+		return render(request,'utensilioTipoEdit.html',self.context)
+
+	def validarEditarTipoUtensilio(self,request):
+		idT = request.session['idT']
+		nombreT = request.POST.get('nombreT')
+		request.session['idT'] = None
+
+		original = TipoUtensilio.objects.get(idtipoutensilio=idT)
+		nombreOr = original.nombre_tipo_utensilio
+		listMatch = TipoUtensilio.objects.filter(nombre_tipo_utensilio=nombreT)
+
+		if listMatch.count() > 0 and nombreT!=nombreOr:
+			self.context['error'] = 'ERROR - el nombre ya ha sido utilizado*'
+
+			tipo = TipoUtensilio.objects.get(idtipoutensilio=idT)
+			self.context['idT']=idT
+			self.context['nombreT']=nombreOr
+			request.session['idT'] = idT
+
+			return render(request,'utensilioTipoEdit.html',self.context)
+		else:
+			actualizado = TipoUtensilio.objects.get(idtipoutensilio=idT)
+			actualizado.nombre_tipo_utensilio = nombreT
+			actualizado.save()	
+
+		utensilios = Utensilio.objects.all()
+		tiposutensilios = TipoUtensilio.objects.all()
+
+		listaUtensilios = []
+		listaTipos = []
+
+		for tipo in tiposutensilios:
+			dicc = {}
+			contador = 0
+			dicc['idT'] = tipo.idtipoutensilio
+			dicc['nombreT'] = tipo.nombre_tipo_utensilio
+			print tipo.nombre_tipo_utensilio
+			for utens in utensilios:
+				if utens.idtipoutensilio == tipo:
+					contador+=1
+			dicc['cantidadT'] = contador
+			listaTipos.append(dicc)
+
+		for utens in utensilios:
+			dicc = {}
+			dicc['idU'] = utens.idutensilio
+			dicc['idT'] = utens.idtipoutensilio.nombre_tipo_utensilio
+			dicc['nombreU'] = utens.nombre_utensilio
+			dicc['stockU'] = utens.stock_utensilio
+			dicc['stockM'] = utens.stock_minimo_utensilio
+			listaUtensilios.append(dicc)
+
+		self.context['tiposUtensilo'] = listaTipos
+		self.context['utensilios'] = listaUtensilios
+
+		return render(request,'utensilios.html',self.context)
+
+	def eliminarTipoUtensilio(self,request):
+		idT = request.POST.get('tipoU')
+		print idT
+		tipo = TipoUtensilio.objects.get(idtipoutensilio=idT)
+		print tipo.nombre_tipo_utensilio
+		tipo.delete()
+
+		utensilios = Utensilio.objects.all()
+		tiposutensilios = TipoUtensilio.objects.all()
+
+		listaUtensilios = []
+		listaTipos = []
+
+		for tipo in tiposutensilios:
+			dicc = {}
+			contador = 0
+			dicc['idT'] = tipo.idtipoutensilio
+			dicc['nombreT'] = tipo.nombre_tipo_utensilio
+			for utens in utensilios:
+				if utens.idtipoutensilio == tipo:
+					contador+=1
+			dicc['cantidadT'] = contador
+			listaTipos.append(dicc)
+
+		for utens in utensilios:
+			dicc = {}
+			dicc['idU'] = utens.idutensilio
+			dicc['idT'] = utens.idtipoutensilio.nombre_tipo_utensilio
+			dicc['nombreU'] = utens.nombre_utensilio
+			dicc['stockU'] = utens.stock_utensilio
+			dicc['stockM'] = utens.stock_minimo_utensilio
+			listaUtensilios.append(dicc)
+
+		self.context['tiposUtensilo'] = listaTipos
+		self.context['utensilios'] = listaUtensilios
+
+		return render(request,'redirect2.html',self.context)
+
+	def crearUtensilio(self,request):
+		utensilios = Utensilio.objects.all()
+		tiposutensilios = TipoUtensilio.objects.all()
+
+		listaUtensilios = []
+		listaTipos = []
+
+		for tipo in tiposutensilios:
+			dicc = {}
+			contador = 0
+			dicc['idT'] = tipo.idtipoutensilio
+			dicc['nombreT'] = tipo.nombre_tipo_utensilio
+			print tipo.nombre_tipo_utensilio
+			for utens in utensilios:
+				if utens.idtipoutensilio == tipo:
+					contador+=1
+			dicc['cantidadT'] = contador
+			listaTipos.append(dicc)
+
+		for utens in utensilios:
+			dicc = {}
+			dicc['idU'] = utens.idutensilio
+			dicc['idT'] = utens.idtipoutensilio.nombre_tipo_utensilio
+			dicc['nombreU'] = utens.nombre_utensilio
+			dicc['stockU'] = utens.stock_utensilio
+			dicc['stockM'] = utens.stock_minimo_utensilio
+			listaUtensilios.append(dicc)
+
+		self.context['tiposUtensilo'] = listaTipos
+		self.context['utensilios'] = listaUtensilios
+
+		return render(request,'utensiliosAdd.html',self.context)
+
+	def validarCrearUtensilio(self,request):
+		nombreU = request.POST.get('nombreU')
+		tipoU = request.POST.get('tipoU')
+		stockU = request.POST.get('stockU')
+		stockM = request.POST.get('stockM')
+		idtipo = TipoUtensilio.objects.get(idtipoutensilio=tipoU)
+		utensilio = Utensilio(nombre_utensilio=nombreU, stock_utensilio=stockU, stock_minimo_utensilio=stockM, idtipoutensilio=idtipo)
+		utensilio.save()
+
+		utensilios = Utensilio.objects.all()
+		tiposutensilios = TipoUtensilio.objects.all()
+
+		listaUtensilios = []
+		listaTipos = []
+
+		for tipo in tiposutensilios:
+			dicc = {}
+			contador = 0
+			dicc['idT'] = tipo.idtipoutensilio
+			dicc['nombreT'] = tipo.nombre_tipo_utensilio
+			print tipo.nombre_tipo_utensilio
+			for utens in utensilios:
+				if utens.idtipoutensilio == tipo:
+					contador+=1
+			dicc['cantidadT'] = contador
+			listaTipos.append(dicc)
+
+		for utens in utensilios:
+			dicc = {}
+			dicc['idU'] = utens.idutensilio
+			dicc['idT'] = utens.idtipoutensilio.nombre_tipo_utensilio
+			dicc['nombreU'] = utens.nombre_utensilio
+			dicc['stockU'] = utens.stock_utensilio
+			dicc['stockM'] = utens.stock_minimo_utensilio
+			listaUtensilios.append(dicc)
+
+		self.context['tiposUtensilo'] = listaTipos
+		self.context['utensilios'] = listaUtensilios
+
+		return render(request,'utensilios.html',self.context)
+
+
+	def editarUtensilio(self,request):
+		idU = request.POST.get('utensilio')
+
+		request.session['idutensilio'] = idU
+
+		utensilio = Utensilio.objects.get(idutensilio=idU)
+		self.context['idutensilio'] = idU
+		self.context['idtipoutensilio'] = utensilio.idtipoutensilio.idtipoutensilio
+		self.context['nombre_utensilio'] = utensilio.nombre_utensilio
+		self.context['tipoUtnsilio'] = utensilio.idtipoutensilio.nombre_tipo_utensilio
+		self.context['stockU'] = utensilio.stock_utensilio
+		self.context['stockM'] = utensilio.stock_minimo_utensilio
+		print self.context['stockU']
+ 
+		utensilios = Utensilio.objects.all()
+		tiposutensilios = TipoUtensilio.objects.all()
+
+		listaUtensilios = []
+		listaTipos = []
+
+		for tipo in tiposutensilios:
+			dicc = {}
+			contador = 0
+			dicc['idT'] = tipo.idtipoutensilio
+			dicc['nombreT'] = tipo.nombre_tipo_utensilio
+			print tipo.nombre_tipo_utensilio
+			for utens in utensilios:
+				if utens.idtipoutensilio == tipo:
+					contador+=1
+			dicc['cantidadT'] = contador
+			listaTipos.append(dicc)
+
+		for utens in utensilios:
+			dicc = {}
+			dicc['idU'] = utens.idutensilio
+			dicc['idT'] = utens.idtipoutensilio.nombre_tipo_utensilio
+			dicc['nombreU'] = utens.nombre_utensilio
+			dicc['stockU'] = utens.stock_utensilio
+			dicc['stockM'] = utens.stock_minimo_utensilio
+			listaUtensilios.append(dicc)
+
+		self.context['tiposUtensilo'] = listaTipos
+		self.context['utensilios'] = listaUtensilios
+
+		return render(request,'utensiliosEdit.html',self.context)
+
+
+	def validarEditarUtensilio(self,request):
+		idU = request.session['idutensilio']
+		request.session['idutensilio'] = None
+		nombre = request.POST.get('nombreU')
+		idtipo = request.POST.get('tipoU')
+		stockU = request.POST.get('stockU')
+		stockM = request.POST.get('stockM')
+		print stockM, stockU
+
+		listaUtensilios = Utensilio.objects.filter(nombre_utensilio=nombre)
+		if listaUtensilios.count() == 1:
+			if int(listaUtensilios[0].idutensilio) == int(idU):
+
+				utensilio = Utensilio.objects.get(idutensilio=idU)
+				tipo = TipoUtensilio.objects.get(idtipoutensilio = idtipo)
+				
+				utensilio.nombre_utensilio = nombre
+				utensilio.idtipoutensilio = tipo
+				utensilio.stock_utensilio = stockU
+				utensilio.stock_minimo_utensilio = stockM
+				utensilio.save()
+
+				utensilios = Utensilio.objects.all()
+				tiposutensilio = TipoUtensilio.objects.all()
+
+				listaUtensilios = []
+				listaTipos = []
+
+				for tipo in tiposutensilio:
+					dicc = {}
+					contador = 0
+					dicc['idT'] = tipo.idtipoutensilio
+					dicc['nombreT'] = tipo.nombre_tipo_utensilio
+					print tipo.nombre_tipo_utensilio
+					for utens in utensilios:
+						if utens.idtipoutensilio == tipo:
+							contador+=1
+					dicc['cantidadT'] = contador
+					listaTipos.append(dicc)
+
+				for utens in utensilios:
+					dicc = {}
+					dicc['idU'] = utens.idutensilio
+					dicc['idT'] = utens.idtipoutensilio.nombre_tipo_utensilio
+					dicc['nombreU'] = utens.nombre_utensilio
+					dicc['stockU'] = utens.stock_utensilio
+					dicc['stockM'] = utens.stock_minimo_utensilio
+					listaUtensilios.append(dicc)
+
+				self.context['tiposUtensilo'] = listaTipos
+				self.context['utensilios'] = listaUtensilios
+
+				return render(request,'utensilios.html',self.context)
+
+		if listaUtensilios.count() > 1:
+			self.context['error'] = 'ERROR - el nombre selsccionado ya existe*'
+
+			utensilio = Utensilio.objects.get(idutensilio=idU)
+
+			self.context['idutensilio'] = idU
+			self.context['idtipo'] = utensilio.idtipoutensilio.idtipoutensilio
+			self.context['nombre_utensilio'] = utensilio.nombre_utensilio
+			self.context['tipoutencilio'] = utensilio.idtipoutensilio.nombre_tipo_utensilio
+			self.context['stockU'] = utensilio.stock_utensilio
+			self.context['stockM'] = utensilio.stock_minimo_utensilio
+
+			utensilios = Utensilio.objects.all()
+			tiposutensilio = TipoUtensilio.objects.all()
+
+			listaUtensilios = []
+			listaTipos = []
+
+			for tipo in tiposutensilio:
+				dicc = {}
+				contador = 0
+				dicc['idT'] = tipo.idtipoutensilio
+				dicc['nombreT'] = tipo.nombre_tipo_utensilio
+				print tipo.nombre_tipo_utensilio
+				for utens in utensilios:
+					if utens.idtipoutensilio == tipo:
+						contador+=1
+				dicc['cantidadT'] = contador
+				listaTipos.append(dicc)
+
+			for utens in utensilios:
+				dicc = {}
+				dicc['idU'] = utens.idutensilio
+				dicc['idT'] = utens.idtipoutensilio.nombre_tipo_utensilio
+				dicc['nombreU'] = utens.nombre_utensilio
+				dicc['stockU'] = utens.stock_utensilio
+				dicc['stockM'] = utens.stock_minimo_utensilio
+				listaUtensilios.append(dicc)
+
+			self.context['tiposUtensilo'] = listaTipos
+			self.context['utensilios'] = listaUtensilios
+
+			return render(request,'utensiliosEdit.html',self.context)
+
+		utensilio = Utensilio.objects.get(idutensilio=idU)
+		tipo = TipoUtensilio.objects.get(idtipoutensilio=idtipo)
+
+		utensilio.nombre_utensilio = nombre
+		utensilio.idtipoutensilio = tipo
+		utensilio.stock_utensilio = stockU
+		utensilio.stock_minimo_utensilio = stockM
+		utensilio.save()
+
+		utensilios = Utensilio.objects.all()
+		tiposutensilio = TipoUtensilio.objects.all()
+
+		listaUtensilios = []
+		listaTipos = []
+
+		for tipo in tiposutensilio:
+			dicc = {}
+			contador = 0
+			dicc['idT'] = tipo.idtipoutensilio
+			dicc['nombreT'] = tipo.nombre_tipo_utensilio
+			print tipo.nombre_tipo_utensilio
+			for utens in utensilios:
+				if utens.idtipoutensilio == tipo:
+					contador+=1
+			dicc['cantidadT'] = contador
+			listaTipos.append(dicc)
+
+		for utens in utensilios:
+			dicc = {}
+			dicc['idU'] = utens.idutensilio
+			dicc['idT'] = utens.idtipoutensilio.nombre_tipo_utensilio
+			dicc['nombreU'] = utens.nombre_utensilio
+			dicc['stockU'] = utens.stock_utensilio
+			dicc['stockM'] = utens.stock_minimo_utensilio
+			listaUtensilios.append(dicc)
+
+		self.context['tiposUtensilo'] = listaTipos
+		self.context['utensilios'] = listaUtensilios
+
+		return render(request,'utensilios.html',self.context)
+
+
+	def eliminarUtensilio(self,request):
+		idU = request.POST.get('utensilio')
+		q = Utensilio.objects.get(idutensilio=idU)
+		q.delete()
+
+		utensilios = Utensilio.objects.all()
+		tiposutensilio = TipoUtensilio.objects.all()
+
+		listaUtensilios = []
+		listaTipos = []
+
+		for tipo in tiposutensilio:
+			dicc = {}
+			contador = 0
+			dicc['idT'] = tipo.idtipoutensilio
+			dicc['nombreT'] = tipo.nombre_tipo_utensilio
+			print tipo.nombre_tipo_utensilio
+			for utens in utensilios:
+				if utens.idtipoutensilio == tipo:
+					contador+=1
+			dicc['cantidadT'] = contador
+			listaTipos.append(dicc)
+
+		for utens in utensilios:
+			dicc = {}
+			dicc['idU'] = utens.idutensilio
+			dicc['idT'] = utens.idtipoutensilio.nombre_tipo_utensilio
+			dicc['nombreU'] = utens.nombre_utensilio
+			dicc['stockU'] = utens.stock_utensilio
+			dicc['stockM'] = utens.stock_minimo_utensilio
+			listaUtensilios.append(dicc)
+
+		self.context['tiposUtensilo'] = listaTipos
+		self.context['utensilios'] = listaUtensilios
+
+		return render(request,'redirect3.html',self.context)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
