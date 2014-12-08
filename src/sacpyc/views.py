@@ -117,7 +117,7 @@ class Home(TemplateView):
 
 
 	def cotizarResumen(self,request):
-		print request.session['evento']
+		#print request.session['evento']
 		items = request.POST.getlist('items')
 		request.session['items'] = items
 		arreglo = []
