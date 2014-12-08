@@ -31,6 +31,11 @@ class Administracion(TemplateView):
 		if self.context['nombre']==None:
 			self.context['error']='Debes iniciar sesión*'
 			return render(request,'login.html',self.context)
+
+		cotizaciones = SolicitudDeCotizacion.objects.filter(estado_solicitud="generada")
+		print cotizaciones
+		self.context['cotizacion'] = cotizaciones
+
 		return render(request,'cotizarAd.html',self.context)
 
 	def llamadaGarzones(self,request):
@@ -1321,7 +1326,31 @@ class Administracion(TemplateView):
 		self.context["lista_item"] = lista_item
 		request.session["nombre_tipo_evento"] = self.context["nombre_evento"]
 		request.session["nombre_tipo_menu"] = self.context["nombre_tipo_menu"]
+		return render(request,'tipoeventoredirect4.html',self.context)
+
+	def redirectTipoEventoEMenu(self,request):
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context['error']='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
+		self.context["nombre_evento"] = request.session["nombre_tipo_evento"]
+		self.context["nombre_tipo_menu"] = request.session["nombre_tipo_menu"]
+		nombre_e = self.context["nombre_evento"]
+		evento = TipoEvento.objects.get(nombre_tipo_evento=nombre_e)
+		menu = TipoMenu.objects.get(idtipoevento = evento.idtipoevento, nombre_tipo_menu=self.context["nombre_tipo_menu"])
+		print menu.nombre_tipo_menu
+		print menu.idtipomenu
+		lista_id_items = ItemMenu.objects.filter(idtipomenu=menu.idtipomenu)
+		lista_item=[]
+		for i in lista_id_items:
+			item_aux = Item.objects.get(iditem = i.iditem.iditem)
+			lista_item.append(item_aux)
+		self.context["lista_item"] = lista_item
+		request.session["nombre_tipo_evento"] = self.context["nombre_evento"]
+		request.session["nombre_tipo_menu"] = self.context["nombre_tipo_menu"]
 		return render(request,'tipoeventoEMenu.html',self.context)
+
 
 	def llamadaTipoEventoEditar(self,request):
 		self.context["error"] = ""
@@ -1336,13 +1365,32 @@ class Administracion(TemplateView):
 		evento = TipoEvento.objects.get(nombre_tipo_evento=nombre)
 		menu = TipoMenu.objects.filter(idtipoevento = evento.idtipoevento)
 		self.context["visible"] = evento.visible
-		opcion = self.context["visible"]
+		if menu.count() == 0:
+			self.context["error"] = "Aun no existen menus asociados"
+			return render(request,'tipoeventoEditar.html',self.context)
+		request.session["nombre_tipo_evento"] = evento.nombre_tipo_evento
+		self.context["menus"] = menu
+		return render(request,'tipoeventoredirect3.html',self.context)
+
+	def redirectTipoEventoEditar(self,request):
+		self.context["error"] = ""
+		self.context['nombre']=request.session['nombre']
+		self.context['apellido']=request.session['apellido']
+		if self.context['nombre']==None:
+			self.context["error"]='Debes iniciar sesión*'
+			return render(request,'login.html',self.context)
+		self.context["nombre_evento"] = request.session["nombre_tipo_evento"]
+		nombre = self.context["nombre_evento"]
+		evento = TipoEvento.objects.get(nombre_tipo_evento=nombre)
+		menu = TipoMenu.objects.filter(idtipoevento = evento.idtipoevento)
+		self.context["visible"] = evento.visible
 		if menu.count() == 0:
 			self.context["error"] = "Aun no existen menus asociados"
 			return render(request,'tipoeventoEditar.html',self.context)
 		request.session["nombre_tipo_evento"] = evento.nombre_tipo_evento
 		self.context["menus"] = menu
 		return render(request,'tipoeventoEditar.html',self.context)
+
 
 	def llamadaTipoEventoSave(self,request):
 		self.context["error"] = ""
